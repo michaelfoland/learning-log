@@ -1,0 +1,28 @@
+{
+  "name": "modular-learning-log",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run build && npm run serve",
+    "build": "webpack",
+    "serve": "http-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-es2015": "^6.24.1",
+    "handlebars": "^4.0.11",
+    "handlebars-loader": "^1.7.0",
+    "http-server": "^0.11.1",
+    "webpack": "^4.10.2",
+    "webpack-cli": "^3.0.1"
+  },
+  "dependencies": {
+    "nedb": "^1.8.0"
+  }
+}

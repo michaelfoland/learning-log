@@ -1,0 +1,13 @@
+<!-- This <div> is what slides -->
+<div class="sub-button-group__button-container">
+  {{#each this}}
+    <button data-target="{{this}}" class="sub-button">{{this}}</button>
+  {{/each}}
+</div>
+
+{{!-- This needs to be visible on the top row no matter what --}}
+<div class="sub-button-nav-button-container">
+  <!-- replace these buttons with proper svg icons at some point -->
+  <button type="button" role="button" id="previous-row-button" class="sub-button-nav" data-nav-direction="backward" >^</button>
+  <button type="button" role="button" id="next-row-button" class="sub-button-nav" data-nav-direction="forward">v</button>
+</div>

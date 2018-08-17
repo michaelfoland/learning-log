@@ -1,0 +1,20 @@
+
+<div id="{{row}}-row" class="entry-form__row">
+  <div id="{{row}}-heading" class="entry-form__row-heading">{{rowHeadingText}}</div>
+  <div id="{{row}}-content" class="entry-form__row-content">
+    <div class="unlocked-input {{unlockedInputClass lockState}}">
+      {{> input }}
+      {{#if hasCharMonitor}}
+        {{> charMonitor }}
+      {{/if}}
+      {{#if hasPromptCloud}}
+        {{> promptCloud }}
+      {{/if}}
+    </div>
+    
+    <div class="locked-input {{lockedInputClass lockState}}">
+      <span id="{{row}}-entry" class="locked-input-value"></span>
+      <button id="edit-{{row}}-button" type="button" role="button" class="locked-input-button">Edit</button>
+    </div>
+  </div>
+</div>

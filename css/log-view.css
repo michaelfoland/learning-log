@@ -1,0 +1,532 @@
+/* ====================
+===== DEV BORDERS =====
+==================== */
+
+/*
+#log-view-filter { border: solid 2px hsl(0,50%,50%); box-sizing: border-box; }
+#log-view { border: solid 2px hsl(270,50%,50%); box-sizing: border-box; }
+#log-view-filter__button-group { border: solid 2px hsl(150,50%,50%); box-sizing: border-box; }
+#log-view-filter__search { border: solid 2px hsl(300,50%,50%); box-sizing: border-box; }
+
+#log-view-display { border: solid 2px hsl(240,50%,50%); box-sizing: border-box;}
+.log-entry { border: solid 2px hsl(30,50%,50%); box-sizing: border-box;}
+.date-block-header {border: solid 2px hsl(180,50%,50%); box-sizing: border-box;}
+#log-view-filter__sub-button-group { border: solid 2px hsl(90,50%,50%); box-sizing: border-box; }
+.log-entry__source {border: solid 2px hsl(120,50%,50%); box-sizing: border-box;}
+*/
+
+/* =================
+===== LOG VIEW =====
+================= */
+
+
+#log-view {
+  /* padding-top: .8rem; */
+  cursor: default;
+  background: #fff;
+}
+
+@media (max-width: 599.98px) {
+  #log-view-filter {
+    padding-top: .2rem; /* moved from #log-view to prevent visibility of scrolling content */
+  }
+}
+
+
+#log-view-filter {
+  /* padding-top: .8rem; 
+  padding-bottom: .2rem; */
+  padding: .8rem 0 .2rem 0; /* moved from #log-view to prevent visibility of scrolling content */
+  display: grid;
+  position: fixed; 
+  width: calc(100vw - 2rem);
+  box-sizing: border-box;
+  background: #fff;
+}
+
+@media (min-width: 600px) {
+  #log-view-filter {
+    grid-template-areas: 
+      "button search"
+      "subButton subButton"
+      "message message";
+  }
+}
+
+@media (max-width: 599.98px) {
+  #log-view-filter {
+    grid-template-areas: 
+      "search"
+      "button"
+      "subButton"
+      "message";
+  }
+}
+
+#log-view-filter__button-group {
+  grid-area: button;
+}
+
+@media (min-width: 600px) {
+  #log-view-filter__button-group {
+    display: flex;
+    align-items: center; /* stretch? */
+  }
+}
+
+@media (max-width: 599.98px) {
+  #log-view-filter__button-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  #log-view-filter__search {
+    justify-content: center;
+    margin-bottom: .2em;
+    padding-bottom: .3em;
+  }
+  
+}
+
+@media (min-width: 600px) {
+  #log-view-filter__search {
+    justify-content: flex-end;    
+    
+  }
+  
+  #log-view-filter__button-group {
+    justify-content: flex-start;
+  }
+}
+
+#log-view-filter__search {
+  grid-area: search;
+  display: flex;
+  align-items: center; 
+}
+
+#log-view-filter__sub-button-group {
+  grid-area: subButton;
+  display: block;
+}
+
+
+.fixed-container {
+  align-items: flex-start; 
+  max-height: 2.4rem;     
+  overflow-y: hidden;
+}
+
+.sub-button-group {
+  display: none;
+  /* flex-wrap: nowrap; */
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start; /* not sure about this */
+  /* border: solid 1px blue; */
+  width: 100%;
+}
+
+.sub-button-group.active-group {
+  display: flex;
+}
+
+.sub-button-group__button-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start; 
+  align-items: center; 
+  transition: margin 300ms linear;
+  /* border: solid 1px green; */
+}
+
+#custom-date-search {
+  /*
+  box-sizing: border-box;
+  border: solid 1px orange;
+  */
+  
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 0;
+}
+
+#log-view-filter__date-sub-buttons {
+  /*
+  box-sizing: border-box;
+  border: solid 1px green;
+  display: flex;
+  */
+  /* flex: 1 1 auto; */
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.log-view__button {
+  font-size: 1rem;
+  margin: 0 .1em;
+  border-radius: .2em;
+  transition: all 150ms linear;
+}
+
+@media (min-width: 600px) {
+  .log-view__button {
+    padding: .1em .3em;    
+  }  
+}
+
+@media (max-width: 599.98px) {
+  .log-view__button {
+    padding: .4em 0;
+  }
+}
+
+#log-view-filter__date-keyword-buttons {
+  /* flex-grow: 1; */
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap; /* maybe? */
+  border: solid 1px yellow;
+}
+
+#log-view__date-button, #log-view-filter__date-sub-buttons .sub-button {
+  color: var(--color-0);
+  border: solid 1px var(--color-0);
+}
+
+#log-view__date-button:hover,#log-view-filter__date-sub-buttons .sub-button:hover, #log-view__date-button.active-button, #log-view-filter__date-sub-buttons .sub-button.active-button {
+  background: var(--color-0);
+  color: #eee;
+}
+
+#log-view__subject-button, #log-view-filter__subject-sub-buttons .sub-button {
+  color: var(--color-1);
+  border: solid 1px var(--color-1);
+}
+
+#log-view__subject-button:hover, #log-view-filter__subject-sub-buttons .sub-button:hover, #log-view__subject-button.active-button, #log-view-filter__subject-sub-buttons .sub-button.active-button  {
+  background: var(--color-1);
+  color: #eee;
+}
+
+#log-view__source-button, #log-view-filter__source-sub-buttons  .sub-button {
+  color: var(--color-3);
+  border: solid 1px var(--color-3);
+}
+
+#log-view__source-button:hover, #log-view-filter__source-sub-buttons .sub-button:hover, #log-view__source-button.active-button, #log-view-filter__source-sub-buttons .sub-button.active-button {
+  background: var(--color-3);
+  color: #eee;
+}
+
+#log-view-filter__search-input {
+  font-size: 1rem;
+  padding: .1em .3em;
+  border-radius: .2em;
+  color: var(--color-2);
+  border: solid 1px #888;
+  margin-right: .5em;
+  flex-shrink: 1;
+  flex-grow: 1;
+  cursor: text;
+}
+
+@media (min-width: 600px) {
+  #log-view-filter__search-input {
+    max-width: 18em;
+  }
+}
+
+
+#log-view__search-submit-button {
+  font-size: 1rem;
+  padding: .1em .3em;
+  border-radius: .2em;
+  background-color: var(--color-2);
+  color: #eee;
+  flex-grow: 0;
+}
+
+#log-view-display {
+  margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+  #log-view-display {
+    width: 85%;
+  }  
+}
+
+@media (min-width: 600px) and (max-width: 899.98px) {
+  #log-view-display {
+    width: 92.5%;
+  }  
+}
+
+@media (max-width: 599.98px) {
+  #log-view-display {
+    width: 100%;
+  }  
+}
+
+.date-block-heading {
+  color: #888;
+  margin: .5em 0;
+  font-size: 1.4rem;
+}
+
+.log-entry {
+  margin: 0em 1em;
+  padding: .5em;
+  /* box-sizing: border-box; */
+  border-left: solid 2px white; /* color added on hover & .log-entry__selected */
+  transition: 
+    padding 150ms ease-out,
+    margin 150ms ease-out,
+    transform 150ms ease-out,
+    background 150ms linear,
+    border 150ms linear;
+}
+
+/* is the transition rule needed */
+.log-entry.log-entry__selected {
+  border-left-color: var(--color-2);
+  padding: 1.5em .5em;
+  margin: 1em 1em;
+  transform: scale(1.05);
+  box-shadow: 1px 0px 3px 1px #ccc;
+  transition:
+    padding 150ms ease-out,
+    margin 150ms ease-out,
+    transform 150ms ease-out,
+    background 150ms linear, 
+    border 150ms linear,
+    box-shadow 150ms linear; 
+}
+
+/* OR maybe use a NOT operator? 
+not sure how that works in css */
+.log-entry.log-entry__selected:hover {
+  background: none;
+}
+
+
+.log-entry__other {
+  display: none;
+  margin-left: 1em; /* may need to adjust this at smaller screen sizes */
+}
+
+.log-entry__source, 
+.log-entry__subject {
+  display: none;
+}
+
+.log-entry.log-entry__selected > .log-entry__other {
+  display: block;
+}
+
+.log-entry.log-entry__selected .log-entry__subject,
+.log-entry.log-entry__selected .log-entry__source {
+  display: inline-block;
+}
+
+.log-entry:hover {
+  background: #eee;
+  border-left-color: var(--color-2);
+}
+
+.log-entry__title {
+  color: var(--color-2);
+  font-size: 1.2rem;
+  margin-bottom: .3em;
+}
+
+.log-entry__source {
+  font-size: 1rem;
+  color: var(--color-3);
+  border: solid 1px var(--color-3);
+  margin: 0 .2em;
+  padding: 0em .3em;
+  transition: all 150ms linear;
+}
+
+.log-entry__source:hover {
+  color: #eee;
+  background: var(--color-3);
+  box-shadow: 0px 0px .1em .1em var(--color-3);
+}
+
+.log-entry__subject {
+  font-size: 1rem;
+  color: var(--color-1);
+  border: solid 1px var(--color-1);
+  margin: 0 .2em;
+  padding: 0em .3em;
+  transition: all 150ms linear;
+}
+
+.log-entry__subject:hover {
+  color: #eee;
+  background: var(--color-1);
+  box-shadow: 0px 0px .1em .1em var(--color-1);
+}
+
+.flex-spacer {
+  flex: 1 1 auto;
+}
+
+.log-entry__title-row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  /* border: solid 1px red; */
+}
+
+.log-entry__metadata {
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-bottom: .3em;
+  /* border: solid 1px blue; */
+}
+
+@media (max-width: 599.98px) {
+  .log-entry__metadata {
+    margin-top: .5em;
+    /* border: solid 1px purple; */
+  }
+}
+
+#log-view-filter__message {
+  margin: .5em auto;
+  font-size: 1rem;
+  grid-area: message;
+  display: none;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+#log-view-filter__message-text {
+  /* display: inline-block; */
+}
+
+#log-view-filter__message-text.subject {
+  color: var(--color-1);
+}
+  
+#log-view-filter__message-text.source {
+  color: var(--color-3);
+}
+
+#log-view-filter__message-text.search {
+  color: var(--color-2);
+}
+
+#log-view-filter__message-button {
+  margin: 0 .5rem;
+  display: inline-block;
+  color: var(--color-0);
+  font-size: .8rem;
+  border-radius: 1em;
+  transition: all 150ms linear;
+}
+
+#log-view-filter__message-button:hover {
+  color: var(--color-0-dark);
+  transform: scale(1.1);
+}
+
+
+
+.sub-button {
+  font-size: .9rem;
+  line-height: 1rem;
+  padding: .3em .3em;
+  margin: .4em .2em;
+  border: solid 1px black; /* in the future, determine color by type of button */
+  border-radius: .8em;
+  transition: all 200ms linear;
+}
+
+#custom-date-filter-button {
+  color: var(--color-0);
+  background: white;
+  border-color: var(--color-0);
+}
+
+#custom-date-filter-button.highlight {
+  color: #eee;
+  background: var(--color-0);
+  
+}
+
+.sub-button-nav {
+  border: solid 1px gray;
+  font-size: 1rem;
+  padding: .1em;
+  margin: .2em;
+}
+
+.sub-button-nav-button-container {
+  /* display: none; */
+  /* border: solid 1px red; */
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.date-filter-input {
+  border-radius: .3em;
+  padding: .1em;
+  margin: 0 .3em;
+  border: solid 1px gray;
+  color: gray;
+  width: 8em;
+  font-size: .8rem;
+}
+
+.date-filter-input.future-date {
+  
+}
+
+span.future-date {
+  position: relative;
+}
+
+span.future-date::before {
+  content: "Date must not be in the future!";
+  position: absolute;
+  display: block;
+  font-size: .8em;
+  color: #a55;
+  top: -1em;
+  background: #fff;
+  z-index: 3;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 1000;
+  background: #fcfcfc;
+  box-shadow: 1px 1px 1px 2px #bbb;
+  font-size: .75rem;
+  color: #a11;
+  padding: .1rem .3rem;
+  border-radius: .3rem;
+  transition: opacity 300ms linear;
+}
+
+.tooltip-hidden {
+  opacity: 0;
+}
+

@@ -1,0 +1,11 @@
+{{#if (isTextarea inputDetails.type)}}
+  <textarea id="{{row}}-input" class="unlocked-input-value" placeholder="{{inputDetails.placeholder}}"></textarea>
+{{else}}
+  <input 
+         type="{{inputDetails.type}}" 
+         id="{{row}}-input" 
+         
+         class="unlocked-input-value {{#each inputDetails.additionalClasses}} {{this}} {{/each}}" 
+         {{#if inputDetails.placeholder}} placeholder="{{inputDetails.placeholder}}" {{/if}}
+  >
+{{/if}}

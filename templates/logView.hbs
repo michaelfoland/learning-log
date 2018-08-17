@@ -1,0 +1,42 @@
+<div id="log-view" class="top-level-view">
+  <div id="log-view-filter">
+    <div id="log-view-filter__button-group">
+      <button type="button" role="button" class="log-view__button" data-target="date" id="log-view__date-button">Date</button>
+      <button type="button" role="button" class="log-view__button" data-target="subject" id="log-view__subject-button">Subject</button>
+      <button type="button" role="button" class="log-view__button" data-target="source" id="log-view__source-button">Source</button>
+    </div>
+    
+    <div id="log-view-filter__search">
+      <input type="text" id="log-view-filter__search-input">
+      <button type="button" role="button" id="log-view__search-submit-button">Search</button>
+    </div>
+    
+    <div id="log-view-filter__sub-button-group">
+      <div id="log-view-filter__date-sub-buttons" data-query-type="date" class="sub-button-group">
+        <div id="log-view-filter__date-keyword-buttons">
+          <button type="button" role="button" class="sub-button" data-target="this-week">This week</button>
+          <button type="button" role="button" class="sub-button" data-target="last-week">Last week</button>
+          <button type="button" role="button" class="sub-button" data-target="this-month">This month</button>
+          <button type="button" role="button" class="sub-button" data-target="last-month">Last month</button>
+        </div>
+        <div id="custom-date-search">
+          <span>From </span><input type="date" id="start-date-input" class="date-filter-input"><span> to </span><input type="date" id="end-date-input" class="date-filter-input">
+          <button type="button" role="button" class="sub-button" id="custom-date-filter-button">Filter</button>
+        </div>
+      </div>
+      
+      <div id="log-view-filter__subject-sub-buttons" data-query-type="subject" class="sub-button-group fixed-container">{{> subButtons subjects }}</div>
+
+      <div id="log-view-filter__source-sub-buttons" data-query-type="source" class="sub-button-group fixed-container">{{> subButtons sources}}</div>
+    </div>
+    
+    
+    <div id="log-view-filter__message">
+      <span id="log-view-filter__message-text"></span>
+      <button type="button" role="button" id="log-view-filter__message-button">(clear filter)</button>
+    </div>
+  </div>
+  <div id="log-view-display">
+    {{> logViewDisplay dateBlocks }}
+  </div>
+</div>

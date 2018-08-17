@@ -1,0 +1,10 @@
+<div id="entry-form" class="top-level-view">
+  {{#each rows}}
+    {{> entryFormRow }}
+  {{/each}}
+  
+  <div class="entry-form__button-row">
+    <button type="button" class="reset-button" id="reset-button" role="button">Reset</button>
+    <button type="button" class="submit-button" id="submit-button" role="button">Add To Log</button>
+  </div>
+</div>
