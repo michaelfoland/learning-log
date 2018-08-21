@@ -4,11 +4,12 @@
       <button type="button" role="button" class="log-view__button" data-target="date" id="log-view__date-button">Date</button>
       <button type="button" role="button" class="log-view__button" data-target="subject" id="log-view__subject-button">Subject</button>
       <button type="button" role="button" class="log-view__button" data-target="source" id="log-view__source-button">Source</button>
+      <button type="button" role="button" class="log-view__button" data-target="search" id="log-view__search-button">Search</button>
     </div>
     
-    <div id="log-view-filter__search">
-      <input type="text" id="log-view-filter__search-input">
-      <button type="button" role="button" id="log-view__search-submit-button">Search</button>
+    <div id="log-view-filter__search-lg" >
+      <input type="text" class="log-view-filter__search-input" id="search-input-lg">
+      <button type="button" role="button" id="log-view__search-submit-button" data-search-input="search-input-lg">Search</button>
     </div>
     
     <div id="log-view-filter__sub-button-group">
@@ -28,6 +29,11 @@
       <div id="log-view-filter__subject-sub-buttons" data-query-type="subject" class="sub-button-group fixed-container">{{> subButtons subjects }}</div>
 
       <div id="log-view-filter__source-sub-buttons" data-query-type="source" class="sub-button-group fixed-container">{{> subButtons sources}}</div>
+      
+      <div id="log-view-filter__search-sub-buttons" class="sub-button-group">
+        <input type="text" class="log-view-filter__search-input" id="search-input-sm">
+        <button type="button" role="button" class="sub-button" id="log-view-filter__search-submit-button" data-search-input="search-input-sm">Search</button>
+      </div>      
     </div>
     
     

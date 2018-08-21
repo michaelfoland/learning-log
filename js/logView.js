@@ -187,9 +187,11 @@ function checkSubButtonPosition() {
 
 function handleClick(e) {
   if (e.target.matches('.log-entry__source')) {
+    unhighlightActiveSubButton();
     hideSubButtonRow();
     filterEntries('source',e.target.textContent);
   } else if (e.target.matches('.log-entry__subject')) {
+    unhighlightActiveSubButton();
     hideSubButtonRow();
     filterEntries('subject',e.target.textContent);
   } else if (e.target.closest('.log-entry')) {
@@ -201,6 +203,11 @@ function handleClick(e) {
   } else if (e.target.matches('.sub-button-nav')) {
     slideSubButtonRow(e);
   } else if (e.target.matches('#log-view__search-submit-button')) {
+    unhighlightActiveSubButton();
+    hideSubButtonRow();
+    executeSearch(e);
+  } else if (e.target.matches('#log-view-filter__search-submit-button')) {
+    unhighlightActiveSubButton();
     hideSubButtonRow();
     executeSearch(e);
   } else if (e.target.matches('.sub-button') && !e.target.matches('#custom-date-filter-button')) {
@@ -214,21 +221,31 @@ function handleClick(e) {
 }
 
 function executeSearch(e) {
-  // check if search input has content
-  let searchInput = document.getElementById('log-view-filter__search-input').value.trim();
-
-  // clear search input
-  document.getElementById('log-view-filter__search-input').value = '';
-
-  if (searchInput === '') return; // bail if search term is empty
+  console.log('=== executeSearch() ===');
   
-  db.getBySearchString(searchInput)
+  let searchInputId = e.target.dataset.searchInput;
+  
+  // check if search input has content
+  let searchInputEl = document.getElementById(searchInputId);
+
+  console.log('searchInputEl =',searchInputEl); //debug
+  
+  let searchInputValue = searchInputEl.value.trim();
+  
+  console.log('searchInputValue =',searchInputValue); //debug
+  
+  // clear search input
+  searchInputEl.value = '';
+
+  if (searchInputValue === '') return; // bail if search term is empty
+  
+  db.getBySearchString(searchInputValue)
     .then(
       result => {
-        updateLogViewDisplay('search',searchInput,result);
+        updateLogViewDisplay('search',searchInputValue,result);
       },
       err => {
-        document.getElementById('log-view-display').textContent = 'Error executing search for \'' + searchInput + '\'';
+        document.getElementById('log-view-display').textContent = 'Error executing search for \'' + searchInputValue + '\'';
       }
     );
 }
@@ -520,9 +537,6 @@ function filterEntries(queryType, queryContent) {
   db.getEntries(query,{date: -1},settings.entriesPerPage)
     .then(
       result => {
-        // debug
-        console.log('about to call updateLogViewDisplay()');
-        // end debug
         updateLogViewDisplay(queryType, queryContent, result.docs);
       },
       error => {
@@ -580,18 +594,10 @@ function toggleSubButton(e) {
 // Add a method to hide the sub-button-row and
 // unhighlight any highlighted sub-button
 function hideSubButtonRow() {
-  console.log('=== hideSubButtonRow ===');
+  console.log('=== hideSubButtonRow() ===');
   
   let logView = document.getElementById(id);
 
-  // unhighlight sub button
-  let highlightedSubButton = logView.querySelector('.sub-button.active-button');
-  
-  if(highlightedSubButton) {
-    console.log('highlightedSubButton =',highlightedSubButton);
-    highlightedSubButton.classList.remove('active-button');
-  }
-  
   // unhighlight log-view__button
   let highlightedButton = logView.querySelector('.log-view__button.active-button');
   
@@ -607,14 +613,29 @@ function hideSubButtonRow() {
     console.log('activeSubButtonGroup =',activeSubButtonGroup);
     activeSubButtonGroup.classList.remove('active-group');
   }
-  
 }
 
+function unhighlightActiveSubButton() {
+  console.log('=== unhighlightActiveSubButton() ===');
+  
+  let logView = document.getElementById(id);
+  
+  // unhighlight sub button
+  let highlightedSubButton = logView.querySelector('.sub-button.active-button');
+  
+  if(highlightedSubButton) {
+    console.log('highlightedSubButton =',highlightedSubButton);
+    highlightedSubButton.classList.remove('active-button');
+  }
+
+}
 
 function toggleSubButtonRow(e) {
-  // console.log('=== toggleSubButtonRow() ===');
+  console.log('=== toggleSubButtonRow() ===');
     
   let targetSubButtonRow = document.getElementById('log-view-filter__' + e.target.dataset.target + '-sub-buttons');
+  
+  console.log('targetSubButtonRow =',targetSubButtonRow); // debug
   
   if (!targetSubButtonRow) return;
   
@@ -661,18 +682,14 @@ function toggleSubButtonRow(e) {
     targetSubButtonRow.classList.add('active-group');
     
     // set anchor button, if necessary; viz. if we're not in date row
-    if (targetSubButtonRow.dataset.queryType !== 'date') {
+    if (targetSubButtonRow.dataset.queryType === 'source' || 
+       targetSubButtonRow.dataset.queryType === 'subject') {
       subButtonAnchor = targetSubButtonRow.firstElementChild.firstElementChild.dataset.target;  
     }
   }
 }
 
 function updateLogViewDisplay(filterType, filterContent, logEntries) {
-  console.log('=== updateLogViewDisplay() ===');
-  console.log('\tfilterType =',filterType);
-  console.log('\tfilterContent =',filterContent);
-  console.log('\tlogEntries =',logEntries);
-  
   // Get ref to element for displaying filter message
   let filterMessageEl = document.getElementById('log-view-filter__message-text');
   
@@ -708,8 +725,13 @@ function updateLogViewDisplay(filterType, filterContent, logEntries) {
   
   let dateBlocks = createDateBlocks(logEntries); 
   
-  document.getElementById('log-view-filter__message').style.display = 'flex'; 
-
+  // if we're in a small screen size (<600px, hide sub button row)
+  if (window.innerHeight < 600) {
+    hideSubButtonRow();
+  }
+  
+  document.getElementById('log-view-filter__message').style.display = 'block'; 
+  
   document.getElementById('log-view-display').innerHTML = logViewDisplay(dateBlocks); 
 }
 

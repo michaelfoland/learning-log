@@ -35,7 +35,6 @@
 
 
 #log-view-filter {
-  border: solid 1px purple;
   display: grid;
   position: fixed; 
   z-index: 50;
@@ -78,32 +77,35 @@
 @media (max-width: 599.98px) {
   #log-view-filter__button-group {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
   
-  #log-view-filter__search {
-    justify-content: center;
-    margin-bottom: .2em;
-    padding-bottom: .3em;
+  #log-view-filter__search-lg {
+    display: none;
   }
+  
+  #log-view__search-button {
+    display: inline-block;
+  }
+  
   
 }
 
 @media (min-width: 600px) {
-  #log-view-filter__search {
+  #log-view-filter__search-lg {
+    grid-area: search;
+    display: flex;
+    align-items: center;
     justify-content: flex-end;    
-    
   }
   
   #log-view-filter__button-group {
     justify-content: flex-start;
   }
-}
-
-#log-view-filter__search {
-  grid-area: search;
-  display: flex;
-  align-items: center; 
+  
+  #log-view__search-button {
+    display: none;
+  }
 }
 
 #log-view-filter__sub-button-group {
@@ -220,7 +222,26 @@
   color: #eee;
 }
 
-#log-view-filter__search-input {
+#log-view__search-button, #log-view-filter__search-sub-buttons .sub-button {
+  color: var(--color-2);
+  border: solid 1px var(--color-2);
+}
+
+#log-view__search-button:hover, #log-view-filter__search-sub-buttons .sub-button:hover, #log-view__search-button.active-button {
+  background: var(--color-2);
+  color: #eee;
+}
+
+#log-view-filter__search-sub-buttons {
+  padding-top: .4rem;
+}
+
+#log-view-filter__search-sub-buttons > .sub-button {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.log-view-filter__search-input {
   font-size: 1rem;
   padding: .1em .3em;
   border-radius: .2em;
@@ -233,7 +254,7 @@
 }
 
 @media (min-width: 600px) {
-  #log-view-filter__search-input {
+  .log-view-filter__search-input {
     max-width: 18em;
   }
 }
@@ -405,16 +426,22 @@ not sure how that works in css */
   font-size: 1rem;
   grid-area: message;
   display: none;
+  /*
   justify-content: center;
   flex-wrap: wrap;
   align-items: flex-start;
-  border: solid 1px pink;
+  */
   box-sizing: border-box;
 }
 
 #log-view-filter__message-text {
-  display: inline-block; 
+  display: inline; 
   text-align: center;
+}
+
+#log-view-filter {
+  text-align: center;
+  margin: 0 auto;
 }
 
 #log-view-filter__message-text.subject {
@@ -431,7 +458,7 @@ not sure how that works in css */
 
 #log-view-filter__message-button {
   margin: 0 .5rem;
-  display: inline-block;
+  display: inline;
   color: var(--color-0);
   font-size: .8rem;
   border-radius: 1em;
@@ -468,10 +495,14 @@ not sure how that works in css */
 }
 
 .sub-button-nav {
-  border: solid 1px gray;
   font-size: 1rem;
   padding: .1em;
   margin: .2em;
+  transition: all 100ms linear;
+}
+
+.sub-button-nav:hover {
+  transform: scale(1.15);
 }
 
 .sub-button-nav-button-container {
@@ -530,5 +561,13 @@ span.future-date::before {
 
 .tooltip-hidden {
   opacity: 0;
+}
+
+#log-view-filter__subject-sub-buttons polyline {
+  stroke: var(--color-1); 
+}
+
+#log-view-filter__source-sub-buttons polyline {
+  stroke: var(--color-3); 
 }
 

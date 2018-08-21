@@ -104,8 +104,6 @@ body {
 
 #main-container {
   width: 100vw;
-  /* padding: 0 1rem; */
-  border: solid 1px pink;
   box-sizing: border-box;
   margin: 0 auto;
   background: #fff;

@@ -1,0 +1,6 @@
+<svg version="1.1"
+     baseProfile="full"
+     xmlns="http://www.w3.org/2000/svg"
+     width="20" height="12">
+  <polyline id="up-arrow" points="2 1, 10 8, 18 1" stroke-width="5" fill="transparent" />
+</svg>
