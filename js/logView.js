@@ -205,6 +205,7 @@ function handleClick(e) {
     hideSubButtonRow();
     executeSearch(e);
   } else if (e.target.matches('.sub-button') && !e.target.matches('#custom-date-filter-button')) {
+    if (e.target.matches('.active-button')) return; // bail if this button is already active
     let closestSubButtonGroup = e.target.closest('.sub-button-group');
     toggleSubButton(e);
     filterEntries(closestSubButtonGroup.dataset.queryType,e.target.dataset.target);
@@ -698,7 +699,7 @@ function updateLogViewDisplay(filterType, filterContent, logEntries) {
   let dateBlocks = createDateBlocks(logEntries); 
   
   // if we're in a small screen size (<600px, hide sub button row)
-  if (window.innerHeight < 600) {
+  if (window.innerWidth < 600) {
     hideSubButtonRow();
   }
   

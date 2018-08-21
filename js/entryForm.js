@@ -136,6 +136,8 @@ function handleFocus(e) {
 }
 
 function handleClick(e) {
+  console.log('handleClick');
+  
   if (e.target.matches('.locked-input-button')) {
     unlockInput(e);
   } else if (e.target.matches('.cloud-item')) {
@@ -166,6 +168,8 @@ function fillInputAndLock(e) {
 }
 
 function handleBlur(e) {
+  if (e.relatedTarget == null) return; // when tag cloud button is clicked
+  
   if (e.target.matches('.unlocked-input-value')) {
   
     // Special code for handling date
@@ -293,7 +297,7 @@ function lockInput(e) {
   inputEl.parentElement.parentElement.querySelector('.locked-input').classList.remove('hidden');
 
   // Move focus to next item
-  // Perhaps modify this to jump to input that haven't been locked?
+  // Perhaps modify this to jump to input that hasn't been locked?
   var newType = entryFormFocusOrder[entryFormFocusOrder.indexOf(type) + 1];
   if (newType) {
     document.getElementById(newType + '-input').focus();  
