@@ -5,6 +5,10 @@ let settings = {
       source: 50,
       subject: 50,
       title: 100
+    },
+    maxButtons: {
+      source: 0,
+      subject: 5
     }
   },
   logView: {

@@ -119,12 +119,24 @@
 ===== NAV BUTTONS =====
 ==================== */
 @media (max-width: 599.98px) {
-  .nav__button {
-    /* min-height: 2.5rem; */
-  }
   
   .nav__button-group {
     height: 3rem;
+  }
+  
+  .nav__button {
+    font-size: 1.3rem;
+    padding: .15rem;
+    margin: 0 .1rem;
+  }
+  
+}
+
+@media (min-width: 600px) {
+  .nav__button {
+    font-size: 1rem;
+    padding: .3rem;
+    margin: 0 .1rem;
   }
 }
 
@@ -135,10 +147,6 @@
   transition: all 150ms linear;
   border-width: 0px;
   border-style: solid;
-  font-size: 1rem;
-  padding: .3rem;
-  margin: 0 .1rem;
-  
 }
 
 .nav__button:hover {

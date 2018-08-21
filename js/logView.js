@@ -7,9 +7,6 @@ let db;
 let settings;
 let logView;
 let observer = new MutationObserver(mutations => {
-  console.log('in mutationObserver callback');
-  
-  console.log('\tmutations =',mutations);
   if (mutations.some(mutation => {
     return mutation.attributeName === 'class' || mutation.attributeName === 'style';
   })) {
@@ -17,9 +14,6 @@ let observer = new MutationObserver(mutations => {
     let spacer = logView.querySelector('.fixed-position-spacer'); // this assumes we'll have only one in the log-view, which is true for now
     
     spacer.style.height = document.getElementById(spacer.dataset.spacerTarget).getBoundingClientRect().height + 'px';
-    
-    console.log('mutation happened!');
-    console.log('spacer =',spacer);
   }
 });
 
@@ -221,18 +215,12 @@ function handleClick(e) {
 }
 
 function executeSearch(e) {
-  console.log('=== executeSearch() ===');
-  
   let searchInputId = e.target.dataset.searchInput;
   
   // check if search input has content
   let searchInputEl = document.getElementById(searchInputId);
-
-  console.log('searchInputEl =',searchInputEl); //debug
   
   let searchInputValue = searchInputEl.value.trim();
-  
-  console.log('searchInputValue =',searchInputValue); //debug
   
   // clear search input
   searchInputEl.value = '';
@@ -566,13 +554,8 @@ function toggleLogEntry(e) {
 }
 
 function toggleSubButton(e) {
-  console.log('=== toggleSubButton() ===');
-  
-  console.log('\te.target =',e.target);
-  
   // If button is already active...
   if (e.target.matches('.active-button')) {
-    console.log('')
     
     // ...make it inactive 
     e.target.classList.remove('active-button');
@@ -594,15 +577,12 @@ function toggleSubButton(e) {
 // Add a method to hide the sub-button-row and
 // unhighlight any highlighted sub-button
 function hideSubButtonRow() {
-  console.log('=== hideSubButtonRow() ===');
-  
   let logView = document.getElementById(id);
 
   // unhighlight log-view__button
   let highlightedButton = logView.querySelector('.log-view__button.active-button');
   
   if (highlightedButton) {
-    console.log('highlightedButton =',highlightedButton);
     highlightedButton.classList.remove('active-button');
   }
   
@@ -610,32 +590,24 @@ function hideSubButtonRow() {
   let activeSubButtonGroup = logView.querySelector('.sub-button-group.active-group');
   
   if(activeSubButtonGroup) {
-    console.log('activeSubButtonGroup =',activeSubButtonGroup);
     activeSubButtonGroup.classList.remove('active-group');
   }
 }
 
 function unhighlightActiveSubButton() {
-  console.log('=== unhighlightActiveSubButton() ===');
-  
   let logView = document.getElementById(id);
   
   // unhighlight sub button
   let highlightedSubButton = logView.querySelector('.sub-button.active-button');
   
   if(highlightedSubButton) {
-    console.log('highlightedSubButton =',highlightedSubButton);
     highlightedSubButton.classList.remove('active-button');
   }
 
 }
 
 function toggleSubButtonRow(e) {
-  console.log('=== toggleSubButtonRow() ===');
-    
   let targetSubButtonRow = document.getElementById('log-view-filter__' + e.target.dataset.target + '-sub-buttons');
-  
-  console.log('targetSubButtonRow =',targetSubButtonRow); // debug
   
   if (!targetSubButtonRow) return;
   
@@ -740,7 +712,7 @@ function createDateBlocks(entries) {
   let currentDate;
   let currentBlock = -1;
   entries.forEach(entry => {
-    if (!currentDate || currentDate !== entry.date) {
+    if (!currentDate || !sameDay(currentDate, entry.date)) {
       currentDate = entry.date;
       dateBlocks.push({
         date: getDateString(new Date(entry.date)),
@@ -782,4 +754,14 @@ function getToday() {
   console.log('in getToday()');
   console.log('returning today =',today.toUTCString());
   return today;
+}
+
+function sameDay(date1, date2) {
+  if (date1.getUTCDate() === date2.getUTCDate() &&
+     date1.getUTCMonth() === date2.getUTCMonth() &&
+     date1.getUTCFullYear() === date2.getUTCFullYear()) {
+    return true;
+  }
+  
+  return false;
 }

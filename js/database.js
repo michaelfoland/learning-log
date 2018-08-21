@@ -18,13 +18,25 @@ export function getAll(prop) {
         if (err) {
           reject('error in finding the property \''+prop+'\'in learningLog');
         }
-        console.log('docs found:',docs);
-        resolve(docs
-                  .map(doc => doc[prop])
-                  .filter((prop,index,array) => {
-                    return index === array.indexOf(prop);
-                  }));
+        let countObject = {};
+        
+        docs.forEach(doc => {
+          if (countObject.hasOwnProperty(doc[prop])) {
+            countObject[doc[prop]]++;
+          } else {
+            countObject[doc[prop]] = 1;
+          }
+        });
+        
+        let countArray = [];
 
+        for (let key in countObject) {
+          countArray.push({prop: key, count: countObject[key]});
+        }
+        
+        countArray.sort((a,b) => b.count - a.count);
+                
+        resolve(countArray.map(obj => obj.prop));
       });
   });
 }

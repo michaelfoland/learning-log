@@ -22,22 +22,7 @@ export function init(database, theNavigator, initialSettings) {
   db = database;
   settings = initialSettings;
   navigator = theNavigator;
-  
   getSourcesAndSubjects();
-}
-
-function getSourcesAndSubjects() {
-  // Get sources and subjects from db
-  return bundlePromises([db.getAll('source'),db.getAll('subject')], ['sources','subjects'])
-  .then(
-    result => {
-      updateSources(result.sources);
-      updateSubjects(result.subjects);
-      console.log('ENTRY-FORM: leaving success callback of getSourcesAndSubjects()');
-    },
-    err => console.log('problem in bundlePromises()')
-  );
-
 }
 
 export function render() {
@@ -54,6 +39,23 @@ export function postRender() {
   attachListeners();
   initializeInputFields();
   initializeDate();
+}
+
+function getSourcesAndSubjects() {
+  // Get sources and subjects from db
+  return bundlePromises([db.getAll('source'),db.getAll('subject')], ['sources','subjects'])
+  .then(
+    result => {
+      console.log('entryForm.getSourcesAndSubjects()');
+      console.log('sources =',result.sources);
+      console.log('subjects =',result.subjects);
+      
+      updateSources(result.sources);
+      updateSubjects(result.subjects);
+    },
+    err => console.log('problem in bundlePromises()')
+  );
+
 }
 
 function addItemToDb(obj) {
@@ -92,12 +94,13 @@ function entryFeedbackTemplatePostRender() {
 
 export function updateSources(newSources) {
   // cloudItems.sources = newSources;
-  rowData.filter(row => row.row === 'source')[0].promptCloudMembers = newSources;
+  
+  rowData.filter(row => row.row === 'source')[0].promptCloudMembers = newSources.slice(0,settings.maxButtons.source);
 }
 
 export function updateSubjects(newSubjects) {
   // cloudItems.subjects = newSubjects;
-  rowData.filter(row => row.row === 'subject')[0].promptCloudMembers = newSubjects;
+  rowData.filter(row => row.row === 'subject')[0].promptCloudMembers = newSubjects.slice(0,settings.maxButtons.subject);
 }
 
 export function updateSettings(newSettings) {
@@ -186,8 +189,6 @@ function handleBlur(e) {
   }
 }
 
-
-
 function checkForTab(e) {
   // console.log('=== checkForTab()');
   
@@ -219,8 +220,6 @@ function checkForTab(e) {
   }
 }
 
-
-
 function handleInputAndChange(e) {
   // I feel like there should be a cleaner way to 
   // do this, but I'm not sure how
@@ -235,9 +234,6 @@ function handleInputAndChange(e) {
 // an event because it's sometimes called after an event
 // that is not happening on the input (viz, a tag cloud item click)
 function updateInputChars(inputEl) {
-  console.log('=== updateInputChars for',inputEl.id);
-  console.log('\tevent.target.value =',inputEl.value);
-  
   document.getElementById(inputEl.id + '-chars').textContent = inputEl.textLength;
 }
 
@@ -307,7 +303,6 @@ function lockInput(e) {
 
 }
 
-
 function checkForm(e) {
   console.log('=== checkForm()');
   
@@ -341,6 +336,8 @@ function checkForm(e) {
         newLogData[propName] = input.value;  
       }
     });
+    
+    console.log('newLogData =',newLogData);
 
     // update view to show that submission is taking place
     // add overlay with centered div
@@ -393,7 +390,6 @@ function clearForm() {
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-
 function removeError(e) {
   e.target.classList.remove('error');
 }
@@ -401,7 +397,7 @@ function removeError(e) {
 // This is not specific to this module.  It should 
 // eventually be imported from somewhere else.
 function getDateString(date) {
-  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric', day: 'numeric'})
+  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric', day: 'numeric', timeZone: 'UTC'});
 }
 
 function initializeDate() {

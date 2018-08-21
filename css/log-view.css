@@ -172,6 +172,7 @@
   transition: all 150ms linear;
 }
 
+
 @media (min-width: 600px) {
   .log-view__button {
     padding: .1em .3em;    
@@ -422,7 +423,7 @@ not sure how that works in css */
 }
 
 #log-view-filter__message {
-  margin: .5em auto;
+  margin: .5em .2em;
   font-size: 1rem;
   grid-area: message;
   display: none;
@@ -454,6 +455,11 @@ not sure how that works in css */
 
 #log-view-filter__message-text.search {
   color: var(--color-2);
+}
+
+#log-view-filter__message-text.date-range, 
+#log-view-filter__message-text.date-keyword {
+  color: var(--color-0);
 }
 
 #log-view-filter__message-button {
