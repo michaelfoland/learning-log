@@ -95,12 +95,12 @@ function entryFeedbackTemplatePostRender() {
 export function updateSources(newSources) {
   // cloudItems.sources = newSources;
   
-  rowData.filter(row => row.row === 'source')[0].promptCloudMembers = newSources.slice(0,settings.maxButtons.source);
+  rowData.filter(row => row.row === 'source')[0].promptCloudMembers = newSources.slice(0,settings.sourcePromptsMax);
 }
 
 export function updateSubjects(newSubjects) {
   // cloudItems.subjects = newSubjects;
-  rowData.filter(row => row.row === 'subject')[0].promptCloudMembers = newSubjects.slice(0,settings.maxButtons.subject);
+  rowData.filter(row => row.row === 'subject')[0].promptCloudMembers = newSubjects.slice(0,settings.subjectPromptsMax);
 }
 
 export function updateSettings(newSettings) {
@@ -118,15 +118,15 @@ function attachListeners() {
 }
 
 function initializeInputFields() {
-  document.getElementById('source-input').maxLength = settings.maxLengths.source;
+  document.getElementById('source-input').maxLength = settings.sourceLengthMax;
   document.getElementById('source-input-chars').textContent = document.getElementById('source-input').textLength;
-  document.getElementById('source-input-max-chars').textContent = settings.maxLengths.source;
-  document.getElementById('subject-input').maxLength = settings.maxLengths.subject;
+  document.getElementById('source-input-max-chars').textContent = settings.sourceLengthMax;
+  document.getElementById('subject-input').maxLength = settings.subjectLengthMax;
   document.getElementById('subject-input-chars').textContent = document.getElementById('subject-input').textLength;
-  document.getElementById('subject-input-max-chars').textContent = settings.maxLengths.subject;
-  document.getElementById('title-input').maxLength = settings.maxLengths.title;
+  document.getElementById('subject-input-max-chars').textContent = settings.subjectLengthMax;
+  document.getElementById('title-input').maxLength = settings.titleLengthMax;
   document.getElementById('title-input-chars').textContent = document.getElementById('title-input').textLength;
-  document.getElementById('title-input-max-chars').textContent = settings.maxLengths.title;
+  document.getElementById('title-input-max-chars').textContent = settings.titleLengthMax;
 }
 
 function handleFocus(e) {

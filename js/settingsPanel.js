@@ -2,16 +2,16 @@ import settingsPanelTemplate from '../templates/settingsPanel.hbs';
 import * as db from './database';
 export const id = 'settings-panel';
 export const buttonText = 'Settings';
+let settings;
 
 export function render() {
   return db.getSettings().then(
     result => {
-      let myObj = {};
-      myObj.color0 = result.global.colors[0];
-      myObj.color1 = result.global.colors[1];
-      myObj.color2 = result.global.colors[2];
-      console.log('myObj =',myObj);      
-      return settingsPanelTemplate(myObj);
+      // cache settings
+      settings = result;
+      
+      // render template and return it to nav
+      return settingsPanelTemplate(result);
     },
     err => {
       console.log('error in call to db.getSettings() from render() in settingsPanel.js');
@@ -24,9 +24,15 @@ export function postRender() {
   
   attachListeners();
   
-  refreshSwatch(1);
-  refreshSwatch(2);
-  refreshSwatch(3);
+  refreshSwatches();
+}
+
+export function preDestroy() {
+  console.log('in settingsPanel.destroy()');
+
+  gatherSettingsPropValues();
+  // check whether any values have changed (viz see if current values are different from user values)
+  
 }
 
 function attachListeners() {
@@ -35,16 +41,23 @@ function attachListeners() {
   settingsPanel.addEventListener('input',handleInput,false);
 }
 
-function refreshSwatch(swatchNum) {
+function refreshSwatch(targetSwatch,hue) {
   // get input
-  let input = document.getElementById('color-' + swatchNum + '-input');
+  // let input = document.getElementById('color-' + swatchNum + '-input');
   
-  document.getElementById('swatch-' + swatchNum + '-dark').style.background = getDarkColor(input.value);
+  document.getElementById(targetSwatch + '-dark').style.background = getDarkColor(hue);
   
-    document.getElementById('swatch-' + swatchNum + '-light').style.background = getLightColor(input.value);
+    document.getElementById(targetSwatch + '-light').style.background = getLightColor(hue);
+}
 
+function refreshSwatches() {
+  let settingsPanel = document.getElementById(id);
   
+  let colorInputs = settingsPanel.getElementsByClassName('theme-color-input');
   
+  for (let i = 0; i < colorInputs.length; i++) {
+    refreshSwatch(colorInputs[i].dataset.target,colorInputs[i].value);    
+  }
 }
 
 function handleInput(e) {
@@ -64,4 +77,12 @@ function getDarkColor(hue) {
 
 function getLightColor(hue) {
   return 'hsl(' + hue + ', 40%, 60%)';
+}
+
+function gatherSettingsPropValues() {
+  let settingsPanel = document.getElementById(id);
+  
+  let inputEls = settingsPanel.querySelectorAll('[data-prop-name]');
+  
+  console.log('there are',inputEls.length,'inputs to go through');
 }

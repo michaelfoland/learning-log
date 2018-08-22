@@ -3,19 +3,19 @@
     <div class="setting-title">Theme Colors</div>
     <div class="setting-content">
       <div class="theme-color-group">
-        <input class="theme-color-input" type="range" min="0" value="{{color0}}" max="359" step="1" id="color-1-input" data-target="swatch-1">
+        <input class="theme-color-input" type="range" min="0" value="{{color0}}" max="359" step="1" id="color-1-input" data-target="swatch-1" data-prop-name="color0">
         <span class="theme-color-swatch" id="swatch-1-light"></span>
         <span class="theme-color-swatch" id="swatch-1-dark"></span>
       </div>
       
       <div class="theme-color-group">
-        <input class="theme-color-input" type="range" min="0" value="{{color1}}" max="359" step="1" id="color-2-input" data-target="swatch-2">
+        <input class="theme-color-input" type="range" min="0" value="{{color1}}" max="359" step="1" id="color-2-input" data-target="swatch-2" data-prop-name="color1">
         <span class="theme-color-swatch" id="swatch-2-light"></span>
         <span class="theme-color-swatch" id="swatch-2-dark"></span>
       </div>
       
       <div class="theme-color-group">
-        <input class="theme-color-input" type="range" min="0" value="{{color2}}" max="359" step="1" id="color-3-input" data-target="swatch-3">
+        <input class="theme-color-input" type="range" min="0" value="{{color2}}" max="359" step="1" id="color-3-input" data-target="swatch-3" data-prop-name="color2">
         <span class="theme-color-swatch" id="swatch-3-light"></span>
         <span class="theme-color-swatch" id="swatch-3-dark"></span>
       </div>      
@@ -23,18 +23,42 @@
   </div>
 
   <div class="setting-row" id="settings-entries">
-    <div class="setting-title">number of entries setting</div>
-    <div class="setting-content">here</div>
+    <div class="setting-title">Number of entries to display in log view</div>
+    <div class="setting-content">
+      <input type="number" min="{{entriesPerPageMin}}" max="{{entriesPerPageMax}}" value="{{entriesPerPageUser}}" data-prop-name="entriesPerPageUser">
+    </div>
   </div>
 
   <div class="setting-row" id="settings-length">
-    <div class="setting-title">length of fields</div>
-    <div class="setting-content">here</div>
+    <div class="setting-title">Maximum length of log entry fields (in characters)</div>
+    <div class="setting-content">
+      <label>
+        Source
+        <input type="number" value="{{sourceLengthUser}}" min="{{sourceLengthMin}}" max="{{sourceLengthMax}}" data-prop-name="sourceLengthUser">
+      </label>
+      <label>
+        Subject
+        <input type="number" value="{{subjectLengthUser}}" min="{{subjectLengthMin}}" max="{{subjectLengthMax}}" data-prop-name="subjectLengthUser">
+      </label>
+      <label>
+        Title
+        <input type="number" value="{{titleLengthUser}}" min="{{titleLengthMin}}" max="{{titleLengthMax}}" data-prop-name="titleLengthUser">
+      </label>
+    </div>
   </div>
 
   <div class="setting-row" id="settings-buttons">
-    <div class="setting-title">prompt button settings</div>
-    <div class="setting-content">here</div>
+    <div class="setting-title">Maximum number of prompt buttons to display on entry form</div>
+    <div class="setting-content">
+      <label>
+        Source 
+        <input type="number" value="{{sourcePromptUser}}" min="{{sourcePromptMin}}" max="{{sourcePromptMax}}" data-prop-name="sourcePromptUser">
+      </label>
+      <label>
+        Subject 
+        <input type="number" value="{{subjectPromptUser}}" min="{{subjectPromptMin}}" max="{{subjectPromptMax}}" data-prop-name="subjectPromptUser">
+      </label>      
+    </div>
   </div>
 
 </div>

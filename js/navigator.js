@@ -49,6 +49,8 @@ export class Navigator {
   }
 
   navigateTo(newViewId) {
+    // console.log('in navigateTo(), this._currentlyVisibleId =',this._currentlyVisibleId);
+    
     // Get target and check that it exists
     let target = this._navTargets.filter(navTarget => {
       return navTarget.id === newViewId;
@@ -56,6 +58,18 @@ export class Navigator {
 
     if (!target) return; // bail if no target was found
 
+    /*
+    // NEW 8/22: run preDestroy on currently visible target
+    let currentView = this._navTargets.filter((curr,prev) => {
+      return curr.id = this._currentlyVisibleId;
+    });
+    
+    if (currentView.length > 0) {
+      console.log('about to call preDestroy()');
+      currentView[0].preDestroy();
+    }
+    */
+        
     this._currentNavTarget = target;
 
     // Fetch new view
@@ -148,6 +162,8 @@ export class Navigator {
     
     
     this.scrollToTop();
+    
+    console.log('at end of changeViews, this._currentlyVisibleId =',this._currentlyVisibleId);
   }
   
   scrollToTop() {

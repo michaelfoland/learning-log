@@ -17,14 +17,14 @@ myNav.postRender();
 insertSpacers('#nav-container');
 
 // SET UP ENTRY FORM
-entryForm.init(db, myNav, appSettings.getSettings('entryForm'));
+entryForm.init(db, myNav, appSettings.getSettings());
 
 appSettings.setPushSettingsCallback(function(obj) {
   entryForm.updateSettings(obj.entryForm);
 })
 
 // SET UP LOG VIEW
-logView.init(db, appSettings.getSettings('logView'));
+logView.init(db, appSettings.getSettings());
 
 // NAVIGATE TO LOG VIEW TO START
 // myNav.navigateTo(logView.id);

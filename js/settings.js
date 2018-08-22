@@ -1,22 +1,32 @@
 // This will have more stuff in the future
 let settings = {
-  entryForm: {
-    maxLengths: {
-      source: 50,
-      subject: 50,
-      title: 100
-    },
-    maxButtons: {
-      source: 0,
-      subject: 5
-    }
-  },
-  logView: {
-    entriesPerPage: 10
-  },
-  global: {
-    colors: [200, 40, 120]
-  }
+  sourceLengthMin: 20,
+  sourceLengthDefault: 50,
+  sourceLengthUser: 50,
+  sourceLengthMax: 100,
+  subjectLengthMin: 20,
+  subjectLengthDefault: 50,
+  subjectLengthUser: 50,
+  subjectLengthMax: 100,  
+  titleLengthMin: 50,
+  titleLengthDefault: 100,
+  titleLengthUser: 100,
+  titleLengthMax: 200,
+  sourcePromptMin: 0,
+  sourcePromptsDefault: 10,
+  sourcePromptUser: 10,
+  sourcePromptsMax: 50,
+  subjectPromptMin: 0,
+  subjectPromptsDefault: 10,
+  subjectPromptUser: 10,
+  subjectPromptsMax: 50,
+  entriesPerPageMin: 5,
+  entriesPerPageDefault: 20,
+  entriesPerPageUser: 20,
+  entriesPerPageMax: 50,
+  color0: 200,
+  color1: 40,
+  color2: 120
 };
 
 let pushSettings = null;
@@ -26,18 +36,7 @@ export function setPushSettingsCallback(callback) {
 }
 
 export function getSettings(subset) {
-  console.log('=== getSettings');
-  
-  if (!subset) { 
-    return JSON.parse(JSON.stringify(settings));
-  }
-  
-  if (settings[subset]) {
-    console.log(JSON.parse(JSON.stringify(settings[subset])));
-    return JSON.parse(JSON.stringify(settings[subset]));
-  } else {
-    return undefined; // is this best?
-  }
+  return JSON.parse(JSON.stringify(settings));
 }
 
 function updateSettings() {
