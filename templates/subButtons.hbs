@@ -8,12 +8,13 @@
 {{!-- This needs to be visible on the top row no matter what --}}
 <div class="sub-button-nav-button-container">
   <!-- replace these buttons with proper svg icons at some point -->
-  <button type="button" role="button" id="previous-row-button" class="sub-button-nav" data-nav-direction="backward" >
+  <button type="button" role="button" class="previous-row-button sub-button-nav" data-nav-direction="backward" >
     <svg width="20" height="12">
       <polyline points="2 11, 10 4, 18 11" fill="transparent" stroke-width="3" />
     </svg>
   </button>
-  <button type="button" role="button" id="next-row-button" class="sub-button-nav" data-nav-direction="forward">
+  <span class="flex-spacer"></span>
+  <button type="button" role="button" class="next-row-button sub-button-nav" data-nav-direction="forward">
     <svg width="20" height="12">
       <polyline points="2 1, 10 8, 18 1" fill="transparent" stroke-width="3" />
     </svg>

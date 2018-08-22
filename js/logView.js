@@ -6,7 +6,7 @@ import { insertSpacers } from './fixed-spacer';
 let db;
 let settings;
 let logView;
-let observer = new MutationObserver(mutations => {
+let fixedSpacerObserver = new MutationObserver(mutations => {
   if (mutations.some(mutation => {
     return mutation.attributeName === 'class' || mutation.attributeName === 'style';
   })) {
@@ -65,11 +65,13 @@ export function postRender() {
 }
 
 function attachMutationObservers() {
-  //
+  // ATTACH FIXED SPACER OBSERVER
   let targetNode = logView.querySelector('#log-view-filter'); // need to observer the whole log-view-filter b/c changes to filter message can also affect spacer
   let config = { characterData: false, childList: false, attributes: true, subtree: true };
   
-  observer.observe(targetNode, config);
+  fixedSpacerObserver.observe(targetNode, config);
+  
+  // ATTACH OBSERVER TO 
 }
 
 function attachListeners() {
@@ -82,10 +84,14 @@ function attachListeners() {
 
   // add the onBlur handlers for date-filter-inputs 
   // Remember the third arg (true) is necessary for the log-view element
-  // to capture the event; otherwise it won't see it
+  // to capture the event; otherwise it won't see it, since is doesn't bubble
   document.getElementById(id).addEventListener('blur',handleDateInputEvent,true); 
   document.getElementById(id).addEventListener('change',handleDateInputEvent,false);
   document.getElementById(id).addEventListener('input',handleDateInputEvent,false);
+
+  // delegating at a lower level here, to avoid listening to bunches
+  // of unnecessary transitions
+document.getElementById(id).querySelector('#log-view-filter__sub-button-group').addEventListener('transitionend',updateSubButtonNav,false);
 }
 
 
@@ -349,7 +355,6 @@ function lastElementIsInFrame(slidingContainer, frame) {
   
   return false;
 }
-
 
 function clearFilter() {
   // Hide filter message
@@ -616,7 +621,7 @@ function toggleSubButtonRow(e) {
   // If button is already active
   if (e.target.matches('.active-button')) {
     
-    // and make it inactive
+    // make it inactive
     e.target.classList.remove('active-button');
   } else {
     // ...otherwise remove the active-button class from any currently active button
@@ -633,31 +638,43 @@ function toggleSubButtonRow(e) {
     // Hide row 
     targetSubButtonRow.classList.remove('active-group');
     
-    // If it contains a .sub-button-group__button-container element, reset its top margin
+    // If it contains a .sub-button-group__button-container element, reset its top margin and remove the mutation observer
     let slidingContainer = targetSubButtonRow.querySelector('.sub-button-group__button-container');
-    if (slidingContainer) slidingContainer.style.marginTop = '0px';
-    
-    // Empty anchor element
-    subButtonAnchor = '';
+    if (slidingContainer) {
+      let navButtons = Array.from(targetSubButtonRow.querySelectorAll('.sub-button-nav'));
+      navButtons.forEach(button => button.style.display = '');
+
+      slidingContainer.style.marginTop = '0px';
+
+      // Empty anchor element
+      subButtonAnchor = '';
+    } 
     
   } else {
-    // reset top margin of current active group if it exists
-    let slidingContainer = document.querySelector('.sub-button-group.active-group > .sub-button-group__button-container');
-    if (slidingContainer) slidingContainer.style.marginTop = '0px';
+    let activeRow = document.getElementsByClassName('active-group')[0];
+    
+    if (activeRow) {
+      let slidingContainer = activeRow.querySelector('.sub-button-group__button-container');
       
-    // remove .active-group from all sub button rows
-    let subButtonRows = Array.from(document.getElementsByClassName('sub-button-group'));
-
-    subButtonRows.forEach(row => {
-      row.classList.remove('active-group');
-    });
-
+      if (slidingContainer) {
+        let navButtons = Array.from(activeRow.querySelectorAll('.sub-button-nav'));
+        navButtons.forEach(button => button.style.display = '');
+        
+        slidingContainer.style.marginTop = '0px';
+      }
+      
+      activeRow.classList.remove('active-group');
+      
+      subButtonAnchor = '';
+    }
+        
     targetSubButtonRow.classList.add('active-group');
     
-    // set anchor button, if necessary; viz. if we're not in date row
+    // set anchor button 
     if (targetSubButtonRow.dataset.queryType === 'source' || 
        targetSubButtonRow.dataset.queryType === 'subject') {
-      subButtonAnchor = targetSubButtonRow.firstElementChild.firstElementChild.dataset.target;  
+      let slidingContainer = targetSubButtonRow.querySelector('.sub-button-group__button-container');
+      subButtonAnchor = slidingContainer.firstElementChild.dataset.target;  
     }
   }
 }
@@ -765,4 +782,24 @@ function sameDay(date1, date2) {
   }
   
   return false;
+}
+
+function updateSubButtonNav(e) { 
+  // listen only to events fired by sub-button-group
+  if (!e.target.matches('.sub-button-group__button-container')) return;
+
+  console.log('updating sub button nav');
+  
+  // log rects of target and parent
+  let targetRect = e.target.getBoundingClientRect();
+  let parentRect = e.target.parentElement.getBoundingClientRect();
+  
+  let upButton = e.target.parentElement.querySelector('.previous-row-button')
+  let downButton = e.target.parentElement.querySelector('.next-row-button')
+  
+  console.log('target top | parent top:',targetRect.top,'|',parentRect.top);
+  console.log('target bottom | parent bottom:',targetRect.bottom,'|',parentRect.bottom);
+  
+  upButton.style.display = Math.abs(targetRect.top - parentRect.top) < 1 ? 'none' : 'inline-block';
+  downButton.style.display = Math.abs(targetRect.bottom - parentRect.bottom) < 1 ? 'none' : 'inline-block';
 }

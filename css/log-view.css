@@ -111,6 +111,8 @@
 #log-view-filter__sub-button-group {
   grid-area: subButton;
   display: block;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 
@@ -122,16 +124,23 @@
 
 .sub-button-group {
   display: none;
-  /* flex-wrap: nowrap; */
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start; /* not sure about this */
-  /* border: solid 1px blue; */
   width: 100%;
+  box-sizing: border-box;
 }
 
 .sub-button-group.active-group {
   display: flex;
+}
+
+.sub-button-group.active-group .previous-row-button {
+  display: none;  
+}
+
+.sub-button-group.active-group .next-row-button {
+  display: inline-block;  
 }
 
 .sub-button-group__button-container {
@@ -141,7 +150,8 @@
   justify-content: flex-start; 
   align-items: center; 
   transition: margin 300ms linear;
-  /* border: solid 1px green; */
+  box-sizing: border-box;
+  max-width: calc(100% - 60px);
 }
 
 #custom-date-search {
@@ -476,16 +486,21 @@ not sure how that works in css */
   transform: scale(1.1);
 }
 
-
-
 .sub-button {
-  font-size: .9rem;
+  font-size: .9em;
   line-height: 1rem;
   padding: .3em .3em;
   margin: .4em .2em;
   border: solid 1px black; /* in the future, determine color by type of button */
   border-radius: .8em;
   transition: all 200ms linear;
+  /* height: 1.6rem; */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 60px);
+  /* box-sizing: border-box; */
+  
 }
 
 #custom-date-filter-button {
@@ -514,12 +529,15 @@ not sure how that works in css */
 .sub-button-nav-button-container {
   /* display: none; */
   /* border: solid 1px red; */
+  box-sizing: border-box;
   flex-shrink: 0;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
   align-items: flex-start;
+  width: 60px;
+
 }
 
 .date-filter-input {
