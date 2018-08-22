@@ -41,6 +41,9 @@
   box-sizing: border-box;
   background: #fff;
   overflow-x: hidden;
+  text-align: center;
+  margin: 0 auto;
+  padding-bottom: .5em;
 }
 
 @media (min-width: 600px) {
@@ -448,11 +451,6 @@ not sure how that works in css */
 #log-view-filter__message-text {
   display: inline; 
   text-align: center;
-}
-
-#log-view-filter {
-  text-align: center;
-  margin: 0 auto;
 }
 
 #log-view-filter__message-text.subject {

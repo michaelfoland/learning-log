@@ -1,7 +1,8 @@
 import Datastore from '../node_modules/nedb/browser-version/out/nedb'; // I think this is right
 
 // load the db
-let learningLog = new Datastore({ filename: 'learningLog', autoload: true });
+let learningLog = new Datastore({filename: 'learningLog', autoload: true });
+
 
 export function getAll(prop) {
   let query = {}
@@ -41,6 +42,23 @@ export function getAll(prop) {
   });
 }
 
+export function logDbContents() {
+  learningLog.find({}, (err, docs) => {
+    if (err) console.log('can\'t log db contents for some reason');
+    
+    console.log('===============');
+    
+    docs.forEach((doc, index) => {
+      console.log('doc ',(index + 1),':');
+      
+      for (let key in doc) {
+        if (doc.hasOwnProperty(key)) {
+          console.log('\t'+key+':\t'+doc[key]);
+        }
+      }
+    })
+  });
+}
 
 export function getBySearchString(searchString) {
   // split string and make sure there are no empty strings

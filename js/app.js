@@ -27,5 +27,6 @@ appSettings.setPushSettingsCallback(function(obj) {
 logView.init(db, appSettings.getSettings('logView'));
 
 // NAVIGATE TO LOG VIEW TO START
-myNav.navigateTo(logView.id);
+// myNav.navigateTo(logView.id);
+myNav.navigateTo(settingsPanel.id);
 
