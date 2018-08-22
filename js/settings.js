@@ -15,20 +15,7 @@ let settings = {
     entriesPerPage: 10
   },
   global: {
-    colors: [
-      {
-        light: '#28b',
-        dark: '#157'
-      },
-      {
-        light: '#b73',
-        dark: '#952'
-      },
-      {
-        light: '#5b5',
-        dark: '#373'
-      }
-    ]
+    colors: [200, 40, 120]
   }
 };
 

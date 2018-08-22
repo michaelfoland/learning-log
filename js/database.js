@@ -1,3 +1,4 @@
+import * as settings from './settings';
 import Datastore from '../node_modules/nedb/browser-version/out/nedb'; // I think this is right
 
 // load the db
@@ -168,8 +169,6 @@ export function getEntries(query, sortParam, limit) {
       });
     });    
   }
-  
-
 }
 
 export function add(newEntry) {
@@ -190,4 +189,11 @@ export function add(newEntry) {
       }
     });
   });
+}
+
+export function getSettings() {
+  // for now just returning a dummy object
+  return new Promise((resolve, reject) => {
+    resolve(settings.getSettings());
+  })
 }

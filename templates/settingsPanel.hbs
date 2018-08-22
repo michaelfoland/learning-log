@@ -1,3 +1,40 @@
-<div id="settings-panel">
-  <p>Current empty settings view rendered at {{ time }}</p>
+<div id="settings-panel" class="top-level-view">
+  <div class="setting-row" id="settings-color">
+    <div class="setting-title">Theme Colors</div>
+    <div class="setting-content">
+      <div class="theme-color-group">
+        <input class="theme-color-input" type="range" min="0" value="{{color0}}" max="359" step="1" id="color-1-input" data-target="swatch-1">
+        <span class="theme-color-swatch" id="swatch-1-light"></span>
+        <span class="theme-color-swatch" id="swatch-1-dark"></span>
+      </div>
+      
+      <div class="theme-color-group">
+        <input class="theme-color-input" type="range" min="0" value="{{color1}}" max="359" step="1" id="color-2-input" data-target="swatch-2">
+        <span class="theme-color-swatch" id="swatch-2-light"></span>
+        <span class="theme-color-swatch" id="swatch-2-dark"></span>
+      </div>
+      
+      <div class="theme-color-group">
+        <input class="theme-color-input" type="range" min="0" value="{{color2}}" max="359" step="1" id="color-3-input" data-target="swatch-3">
+        <span class="theme-color-swatch" id="swatch-3-light"></span>
+        <span class="theme-color-swatch" id="swatch-3-dark"></span>
+      </div>      
+    </div>
+  </div>
+
+  <div class="setting-row" id="settings-entries">
+    <div class="setting-title">number of entries setting</div>
+    <div class="setting-content">here</div>
+  </div>
+
+  <div class="setting-row" id="settings-length">
+    <div class="setting-title">length of fields</div>
+    <div class="setting-content">here</div>
+  </div>
+
+  <div class="setting-row" id="settings-buttons">
+    <div class="setting-title">prompt button settings</div>
+    <div class="setting-content">here</div>
+  </div>
+
 </div>
