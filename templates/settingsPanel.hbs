@@ -3,21 +3,36 @@
     <div class="setting-title">Theme Colors</div>
     <div class="setting-content">
       <div class="theme-color-group">
+        <label for="color-1-input">Color 1</label>
+        
         <input class="theme-color-input" type="range" min="0" value="{{color0}}" max="359" step="1" id="color-1-input" data-target="swatch-1" data-prop-name="color0">
-        <span class="theme-color-swatch" id="swatch-1-light"></span>
-        <span class="theme-color-swatch" id="swatch-1-dark"></span>
+        
+        <div class="color-pair">
+          <span class="theme-color-swatch" id="swatch-1-light"></span>
+          <span class="theme-color-swatch" id="swatch-1-dark"></span>
+        </div>
       </div>
       
       <div class="theme-color-group">
+        <label for="color-2-input">Color 2</label>
+          
         <input class="theme-color-input" type="range" min="0" value="{{color1}}" max="359" step="1" id="color-2-input" data-target="swatch-2" data-prop-name="color1">
-        <span class="theme-color-swatch" id="swatch-2-light"></span>
-        <span class="theme-color-swatch" id="swatch-2-dark"></span>
+
+        <div class="color-pair">
+          <span class="theme-color-swatch" id="swatch-2-light"></span>
+          <span class="theme-color-swatch" id="swatch-2-dark"></span>
+        </div>
       </div>
       
       <div class="theme-color-group">
+        <label for="color-3-input">Color 3</label>
+          
         <input class="theme-color-input" type="range" min="0" value="{{color2}}" max="359" step="1" id="color-3-input" data-target="swatch-3" data-prop-name="color2">
-        <span class="theme-color-swatch" id="swatch-3-light"></span>
-        <span class="theme-color-swatch" id="swatch-3-dark"></span>
+
+        <div class="color-pair">
+          <span class="theme-color-swatch" id="swatch-3-light"></span>
+          <span class="theme-color-swatch" id="swatch-3-dark"></span>
+        </div>
       </div>      
     </div>
   </div>
@@ -25,39 +40,51 @@
   <div class="setting-row" id="settings-entries">
     <div class="setting-title">Number of entries to display in log view</div>
     <div class="setting-content">
-      <input type="number" min="{{entriesPerPageMin}}" max="{{entriesPerPageMax}}" value="{{entriesPerPageUser}}" data-prop-name="entriesPerPageUser">
+      <div class="setting-content__sub-row">
+        <label for="entries-per-page">Entries</label>
+        <input type="number" id="entries-per-page" class="setting-content__sub-row-input" min="{{entriesPerPageMin}}" max="{{entriesPerPageMax}}" step="5" placeholder="{{entriesPerPageUser}}" data-prop-name="entriesPerPageUser">
+        <span class="instruction"><span class="text-chunk">bewteen 5 and 50, </span><span class="text-chunk">multiples of 5</span></span>
+      </div>
     </div>
   </div>
 
   <div class="setting-row" id="settings-length">
     <div class="setting-title">Maximum length of log entry fields (in characters)</div>
     <div class="setting-content">
-      <label>
-        Source
-        <input type="number" value="{{sourceLengthUser}}" min="{{sourceLengthMin}}" max="{{sourceLengthMax}}" data-prop-name="sourceLengthUser">
-      </label>
-      <label>
-        Subject
-        <input type="number" value="{{subjectLengthUser}}" min="{{subjectLengthMin}}" max="{{subjectLengthMax}}" data-prop-name="subjectLengthUser">
-      </label>
-      <label>
-        Title
-        <input type="number" value="{{titleLengthUser}}" min="{{titleLengthMin}}" max="{{titleLengthMax}}" data-prop-name="titleLengthUser">
-      </label>
+      <div class="setting-content__sub-row">
+        <label for="source-length-input">Source</label>
+        <input type="number" class="setting-content__sub-row-input" placeholder="{{sourceLengthUser}}" min="{{sourceLengthMin}}" max="{{sourceLengthMax}}" data-prop-name="sourceLengthUser">
+        <span class="instruction">between 20 and 100</span>
+      </div>
+      <div class="setting-content__sub-row">
+        <label for="subject-length-input">Subject</label>
+        <input type="number" id="subject-length-input" class="setting-content__sub-row-input" placeholder="{{subjectLengthUser}}" min="{{subjectLengthMin}}" max="{{subjectLengthMax}}" data-prop-name="subjectLengthUser">
+        <span class="instruction">between 20 and 100</span>
+      </div>
+      <div class="setting-content__sub-row">
+        <label for="title-length-input">Title</label>
+        <input type="number" id="title-length-input" class="setting-content__sub-row-input" placeholder="{{titleLengthUser}}" min="{{titleLengthMin}}" max="{{titleLengthMax}}" data-prop-name="titleLengthUser">
+        <span class="instruction">between 50 and 200</span>
+      </div>
     </div>
   </div>
 
   <div class="setting-row" id="settings-buttons">
     <div class="setting-title">Maximum number of prompt buttons to display on entry form</div>
     <div class="setting-content">
-      <label>
-        Source 
-        <input type="number" value="{{sourcePromptUser}}" min="{{sourcePromptMin}}" max="{{sourcePromptMax}}" data-prop-name="sourcePromptUser">
-      </label>
-      <label>
-        Subject 
-        <input type="number" value="{{subjectPromptUser}}" min="{{subjectPromptMin}}" max="{{subjectPromptMax}}" data-prop-name="subjectPromptUser">
-      </label>      
+      <div class="setting-content__sub-row">
+        <label for="source-prompt-input">Source</label>
+        <input type="number" id="source-prompt-input" class="setting-content__sub-row-input" placeholder="{{sourcePromptUser}}" min="{{sourcePromptMin}}" max="{{sourcePromptMax}}" data-prop-name="sourcePromptUser">
+        
+        <span class="instruction">between 0 and 50</span>
+      </div>
+      <div class="setting-content__sub-row">
+        <label for="subject-prompt-input">Subject</label>
+          
+        <input type="number" id="subject-prompt-input" class="setting-content__sub-row-input" placeholder="{{subjectPromptUser}}" min="{{subjectPromptMin}}" max="{{subjectPromptMax}}" data-prop-name="subjectPromptUser">
+        
+        <span class="instruction">between 0 and 50</span>
+      </div>
     </div>
   </div>
 

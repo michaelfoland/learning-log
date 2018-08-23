@@ -39,6 +39,7 @@ function attachListeners() {
   let settingsPanel = document.getElementById(id);
   
   settingsPanel.addEventListener('input',handleInput,false);
+  
 }
 
 function refreshSwatch(targetSwatch,hue) {
@@ -66,17 +67,23 @@ function handleInput(e) {
   // get value of target slider 
   let hue = e.target.value;
   let targetSwatch = e.target.dataset.target;
+  
   document.getElementById(targetSwatch + '-dark').style.background = getDarkColor(hue);
   
   document.getElementById(targetSwatch + '-light').style.background = getLightColor(hue);
+  
+  let colorId = targetSwatch.charAt(targetSwatch.length - 1);
+  
+  document.documentElement.style.setProperty('--color-' + colorId, getLightColor(hue));
+  document.documentElement.style.setProperty('--color-' + colorId + '-dark', getDarkColor(hue));
 }
   
 function getDarkColor(hue) {
-  return 'hsl(' + hue + ', 70%, 30%)';
+  return 'hsl(' + hue + ', 75%, 25%)';
 }
 
 function getLightColor(hue) {
-  return 'hsl(' + hue + ', 40%, 60%)';
+  return 'hsl(' + hue + ', 50%, 50%)';
 }
 
 function gatherSettingsPropValues() {
