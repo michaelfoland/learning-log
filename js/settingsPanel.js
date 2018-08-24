@@ -39,16 +39,13 @@ function attachListeners() {
   let settingsPanel = document.getElementById(id);
   
   settingsPanel.addEventListener('input',handleInput,false);
+  settingsPanel.addEventListener('click',handleClick,false);
   
 }
 
 function refreshSwatch(targetSwatch,hue) {
-  // get input
-  // let input = document.getElementById('color-' + swatchNum + '-input');
-  
   document.getElementById(targetSwatch + '-dark').style.background = getDarkColor(hue);
-  
-    document.getElementById(targetSwatch + '-light').style.background = getLightColor(hue);
+  document.getElementById(targetSwatch + '-light').style.background = getLightColor(hue);
 }
 
 function refreshSwatches() {
@@ -61,6 +58,31 @@ function refreshSwatches() {
   }
 }
 
+function handleClick(e) {
+  let target = e.target;
+  if (!target.matches('.settings-panel-button')) return;
+  
+  let settingsPanel = document.getElementById(id);
+  
+  if (target.id === 'settings-panel__reset-button') {
+    // reset theme color inputs to their original values
+    settingsPanel.querySelector('#color-1-input').value = settings.color0;
+    settingsPanel.querySelector('#color-2-input').value = settings.color1;
+    settingsPanel.querySelector('#color-3-input').value = settings.color2;
+    
+    refreshSwatches();
+    
+    setAllCssVariables();
+    
+    // reset all other inputs to 0
+    let nonColorInputs = Array.from(settingsPanel.querySelectorAll('input:not(.theme-color-input)'));
+    
+    nonColorInputs.forEach(input => input.value = '');
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
 function handleInput(e) {
   if (!e.target.matches('.theme-color-input')) return;
   
@@ -68,16 +90,25 @@ function handleInput(e) {
   let hue = e.target.value;
   let targetSwatch = e.target.dataset.target;
   
-  document.getElementById(targetSwatch + '-dark').style.background = getDarkColor(hue);
-  
-  document.getElementById(targetSwatch + '-light').style.background = getLightColor(hue);
+  refreshSwatch(targetSwatch, hue);
   
   let colorId = targetSwatch.charAt(targetSwatch.length - 1);
   
+  setCssVariable(colorId, hue);
+}
+  
+function setAllCssVariables() {
+  setCssVariable(1, document.getElementById('color-1-input').value);
+  setCssVariable(2, document.getElementById('color-2-input').value);
+  setCssVariable(3, document.getElementById('color-3-input').value);
+  
+}
+
+function setCssVariable(colorId, hue) {
   document.documentElement.style.setProperty('--color-' + colorId, getLightColor(hue));
   document.documentElement.style.setProperty('--color-' + colorId + '-dark', getDarkColor(hue));
 }
-  
+
 function getDarkColor(hue) {
   return 'hsl(' + hue + ', 65%, 35%)';
 }

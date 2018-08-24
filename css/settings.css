@@ -173,3 +173,39 @@ input::-webkit-inner-spin-button {
 .text-chunk {
   display: inline-block;
 }
+
+#settings-button-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+#settings-panel__reset-button {
+  color: var(--color-1);
+  border: solid 1px var(--color-1);
+  background-color: white;
+  transition: all 150ms linear;
+  /* box-sizing: border-box; */
+}
+
+#settings-panel__submit-button {
+  color: white;
+  background-color: var(--color-1);
+  transition: all 150ms linear;
+}
+
+#settings-panel__submit-button:hover {
+  box-shadow: 0 0 .3em .1em var(--color-1);
+}
+
+#settings-panel__reset-button:hover {
+  box-shadow: 0 0 .3em .1em var(--color-1);
+  border-color: white;
+}
+
+.settings-panel-button {
+  font-size: 1.4rem;
+  padding: .1em .5em;
+  border-radius: 1em;
+  margin: 0 .25em;
+}
