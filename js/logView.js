@@ -39,6 +39,8 @@ export function render() {
   )
     .then(
       result => {
+        console.log('all docs =',result.entries.docs);
+        
         let dateBlocks = createDateBlocks(result.entries.docs);
         let myObj = {};
         myObj.sources = result.sources;
@@ -365,29 +367,18 @@ function clearFilter() {
   if (activeButton) activeButton.classList.remove('active-button');
   
   // Get all entries in db
-  getAllEntries()
+  db.getAllEntries()
     .then(
       result => {
-        // Add content to DOM
-        document.getElementById('log-view-display').innerHTML = result;
+        // Chunk and render content
+        let dateBlocks = createDateBlocks(result.docs);
+        document.getElementById('log-view-display').innerHTML = logViewDisplay(dateBlocks);
       },
       error => {
         // just log to console for now
         console.log('promise rejected by getAllEntries()');
       }
     )
-}
-
-function getAllEntries() {
-  return db.getEntries({},{date: -1},settings.entriesPerPage)
-    .then(
-      result => {
-        // Chunk and render content
-        let dateBlocks = createDateBlocks(result.docs);
-        return logViewDisplay(dateBlocks);
-      },
-      error => console.log('there was an error in db.getEntries' + error.message)
-    );
 }
 
 function filterEntriesByDateRange(e) {

@@ -63,7 +63,6 @@ export function getAll(prop) {
   let projection = {};
   projection[prop] = 1;
   
-  
   return new Promise((resolve, reject) => {
     learningLog.find(
       query,
@@ -183,44 +182,34 @@ export function getByFrequency(prop) {
   })
 }
 
-export function getEntries(query, sortParam, limit) {
+export function getAllEntries() {
+  return new Promise((resolve, reject) => {
+    getEntries({})
+      .then(
+        result => resolve(result),
+        err => reject(err)
+      );
+  });
+}
+
+export function getEntries(query) {
   console.log('=== database getEntries()');
-  
-  if (!sortParam) {
-    return new Promise((resolve, reject) => {
-      learningLog.find(query).limit(limit).exec((err, docs) => {
-        if (err) {
-          reject({ 
-            message: 'error executing query',
-            query: query
-          });
-        } else {
-          resolve({
-            message: 'successfully executed query',
-            query: query,
-            docs: docs
-          });
-        }
-      });
+  return new Promise((resolve, reject) => {
+    learningLog.find(query).sort({date: -1, createdAt: -1}).exec((err, docs) => {
+      if (err) {
+        reject({ 
+          message: 'error executing query',
+          query: query
+        });
+      } else {
+        resolve({
+          message: 'successfully executed query',
+          query: query,
+          docs: docs
+        });
+      }
     });
-  } else {
-    return new Promise((resolve, reject) => {
-      learningLog.find(query).sort(sortParam).limit(limit).exec((err, docs) => {
-        if (err) {
-          reject({ 
-            message: 'error executing query',
-            query: query
-          });
-        } else {
-          resolve({
-            message: 'successfully executed query',
-            query: query,
-            docs: docs
-          });
-        }
-      });
-    });    
-  }
+  });
 }
 
 export function add(newEntry) {
