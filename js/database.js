@@ -51,7 +51,7 @@ export function updateSettings(newSettings) {
       if (err) {
         reject('db error: unable to update settings');
       } else {
-        resolve(upsert);
+        resolve(docs);
       }
     });
   })

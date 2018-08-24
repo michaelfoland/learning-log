@@ -2,6 +2,7 @@ import settingsPanelTemplate from '../templates/settingsPanel.hbs';
 import * as db from './database';
 export const id = 'settings-panel';
 export const buttonText = 'Settings';
+let settingsPanel;
 let settings;
 
 export function render() {
@@ -19,6 +20,9 @@ export function render() {
 }
 
 export function postRender() {
+  // get and cache ref to setting panel el
+  settingsPanel = document.getElementById(id);
+  
   // nothing right now
   console.log('executing settingsPanel postRender()');
   
@@ -30,17 +34,14 @@ export function postRender() {
 export function preDestroy() {
   console.log('in settingsPanel.destroy()');
 
-  gatherSettingsPropValues();
+  gatherInputValues();
   // check whether any values have changed (viz see if current values are different from user values)
   
 }
 
 function attachListeners() {
-  let settingsPanel = document.getElementById(id);
-  
   settingsPanel.addEventListener('input',handleInput,false);
   settingsPanel.addEventListener('click',handleClick,false);
-  
 }
 
 function refreshSwatch(targetSwatch,hue) {
@@ -49,8 +50,6 @@ function refreshSwatch(targetSwatch,hue) {
 }
 
 function refreshSwatches() {
-  let settingsPanel = document.getElementById(id);
-  
   let colorInputs = settingsPanel.getElementsByClassName('theme-color-input');
   
   for (let i = 0; i < colorInputs.length; i++) {
@@ -62,25 +61,40 @@ function handleClick(e) {
   let target = e.target;
   if (!target.matches('.settings-panel-button')) return;
   
-  let settingsPanel = document.getElementById(id);
-  
   if (target.id === 'settings-panel__reset-button') {
-    // reset theme color inputs to their original values
-    settingsPanel.querySelector('#color-1-input').value = settings.color0;
-    settingsPanel.querySelector('#color-2-input').value = settings.color1;
-    settingsPanel.querySelector('#color-3-input').value = settings.color2;
-    
-    refreshSwatches();
-    
-    setAllCssVariables();
-    
-    // reset all other inputs to 0
-    let nonColorInputs = Array.from(settingsPanel.querySelectorAll('input:not(.theme-color-input)'));
-    
-    nonColorInputs.forEach(input => input.value = '');
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    reset();
+  } else if (target.id === 'settings-panel__save-button') {
+    save();
   }
+}
+
+function save() {
+  // gather all props
+  gatherInputValues();
+  
+  // add them into the settings object
+  
+  
+  // push the settings object to db.updateSettings();
+}
+
+
+function reset() {
+  // reset theme color inputs to their original values
+  settingsPanel.querySelector('#color-1-input').value = settings.color0;
+  settingsPanel.querySelector('#color-2-input').value = settings.color1;
+  settingsPanel.querySelector('#color-3-input').value = settings.color2;
+  
+  // refresh swatches and css variables to match
+  refreshSwatches();
+  setAllCssVariables();
+
+  // reset all other inputs to 0
+  let nonColorInputs = Array.from(settingsPanel.querySelectorAll('input:not(.theme-color-input)'));
+  nonColorInputs.forEach(input => input.value = '');
+
+  // scroll back to the top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function handleInput(e) {
@@ -117,10 +131,27 @@ function getLightColor(hue) {
   return 'hsl(' + hue + ', 50%, 50%)';
 }
 
-function gatherSettingsPropValues() {
-  let settingsPanel = document.getElementById(id);
+function gatherInputValues() {
+  let inputEls = Array.from(settingsPanel.querySelectorAll('[data-prop-name]'));
   
-  let inputEls = settingsPanel.querySelectorAll('[data-prop-name]');
+  let updated = false;
+    
+  inputEls.forEach(input => {
+    if (input.value && input.value !== settings[input.dataset.propName]) {
+      updated = true;
+      settings[input.dataset.propName] = input.value;
+    }
+  });
   
-  console.log('there are',inputEls.length,'inputs to go through');
+  db.updateSettings(settings)
+    .then(
+      result => {
+        // TODO: display an overlay here on successful update
+        document.getElementById('main-container').innerHTML = settingsPanelTemplate(settings);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+      err => {
+        console.log('error while trying to update settings');
+      }
+    )
 }
