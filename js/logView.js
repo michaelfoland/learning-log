@@ -78,24 +78,31 @@ function attachMutationObservers() {
 
 function attachListeners() {
   // add click handlers for .log-entry objects
-  document.getElementById(id).addEventListener('click',handleClick,false);
+  logView.addEventListener('click',handleClick,false);
 
   // add resize listener to window for keeping sub button rows in order
-  // THIS WILL NEED TO BE REMOVED WHENEVER WE LEAVE 
+  // THIS WILL NEED TO BE REMOVED WHENEVER LOG-VIEW IS NOT VISIBLE
   window.addEventListener('resize', checkSubButtonPosition, false);  
 
   // add the onBlur handlers for date-filter-inputs 
   // Remember the third arg (true) is necessary for the log-view element
   // to capture the event; otherwise it won't see it, since is doesn't bubble
-  document.getElementById(id).addEventListener('blur',handleDateInputEvent,true); 
-  document.getElementById(id).addEventListener('change',handleDateInputEvent,false);
-  document.getElementById(id).addEventListener('input',handleDateInputEvent,false);
-
+  logView.addEventListener('blur',handleDateInputEvent,true); 
+  logView.addEventListener('change',handleDateInputEvent,false);
+  logView.addEventListener('input',handleDateInputEvent,false);
+  logView.addEventListener('keypress',handleKeypress,false);
+  
   // delegating at a lower level here, to avoid listening to bunches
   // of unnecessary transitions
-document.getElementById(id).querySelector('#log-view-filter__sub-button-group').addEventListener('transitionend',updateSubButtonNav,false);
+  logView.querySelector('#log-view-filter__sub-button-group').addEventListener('transitionend',updateSubButtonNav,false);
 }
 
+function handleKeypress(e) {
+  console.log(e.code);
+  if (!e.target.matches('.log-entry__title') || e.code !== 'Space') return; 
+  e.preventDefault(); // prevent scrolling that usually occurs on spacebar press
+  toggleLogEntry(e);
+}
 
 function handleDateInputEvent(e) {
   if (!e.target.matches('.date-filter-input') || !e.target.value) return; // bail if we're not looking at a date-filter-input
