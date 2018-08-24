@@ -56,17 +56,21 @@ button {
   --color-0-light: #999;
   --color-0: #666;
   --color-0-dark: #333;
-  --color-1: hsl(200, 50%, 50%);
-  --color-1-dark: hsl(200, 75%, 25%);
+/*  --color-1: hsl(200, 50%, 50%);
+  --color-1-dark: hsl(200, 65%, 35%);
   --color-2: hsl(40, 50%, 50%);
-  --color-2-dark: hsl(40, 75%, 25%);
+  --color-2-dark: hsl(40, 65%, 35%);
   --color-3: hsl(120, 50%, 50%);
-  --color-3-dark: hsl(120, 75%, 25%);
+  --color-3-dark: hsl(120, 65%, 35%);
+*/
   
+  --color-1: red;
+  --color-1-dark: orange;
+  --color-2: yellow;
+  --color-2-dark: green;
+  --color-3: blue;
+  --color-3-dark: purple;
 }
-
-
-
 
 /* ==========================
 ===== MAJOR AREA STYLES =====

@@ -6,27 +6,79 @@ import { insertSpacers } from './fixed-spacer';
 import * as entryForm from './entryForm';
 import * as logView from './logView';
 import * as settingsPanel from './settingsPanel';
-import * as appSettings from './settings';
+import { defaultSettings } from './settings';
+
+// init db
+db.isReady()
+  .then(
+    result => {
+      checkSettings();
+    },
+    err => {
+      // TO DO: display some sort of reload/retry message in main container
+      console.log(err);
+      console.log('\tonFailure callback of db.isReady() in app.js');
+    }); 
+
+function checkSettings() {
+  db.getSettings()
+    .then(
+      settings => {
+        if (settings) {
+          setup(settings);
+        } else {
+          firstTimeSetup();
+        }
+      },
+      err => console.log('error in checkSettings of app.js')
+    )
+}
+
+
+function firstTimeSetup() {
+  db.updateSettings(defaultSettings)
+    .then(
+      result => {
+        console.log('successfully, loaded settings, now calling setup()');
+        setup(defaultSettings);
+      },      err => {
+        console.log('failed to loaded settings to db');
+      }
+    )
+}
+
 
 // SET UP NAVBAR
-const myNav = new Navigator([logView, entryForm, settingsPanel], 'main-container');
-document.getElementById('nav-container').innerHTML = myNav.render();
-myNav.postRender();
+let myNav;
 
-// insert a spacer 'under' the fixed-position nav-container element
-insertSpacers('#nav-container');
+// called after db is good to go
+function setup(settings) {
+  // set up css variables 
+  setupCssVariables(settings);
+  
+  myNav = new Navigator([logView, entryForm, settingsPanel], 'main-container');
+  document.getElementById('nav-container').innerHTML = myNav.render();
+  myNav.postRender();
 
-// SET UP ENTRY FORM
-entryForm.init(db, myNav, appSettings.getSettings());
+  // insert a spacer 'under' the fixed-position nav-container element
+  insertSpacers('#nav-container');
 
-appSettings.setPushSettingsCallback(function(obj) {
-  entryForm.updateSettings(obj.entryForm);
-})
+  // SET UP ENTRY FORM
+  entryForm.init(db, myNav, settings);
 
-// SET UP LOG VIEW
-logView.init(db, appSettings.getSettings());
+  // SET UP LOG VIEW
+  logView.init(db, settings);
 
-// NAVIGATE TO LOG VIEW TO START
-// myNav.navigateTo(logView.id);
-myNav.navigateTo(settingsPanel.id);
+  // NAVIGATE TO LOG VIEW TO START
+  myNav.navigateTo(logView.id);
+}
 
+
+function setupCssVariables(settings) {
+  document.documentElement.style.setProperty('--color-1', 'hsl(' + settings.color0 + ', 50%, 50%)');
+  document.documentElement.style.setProperty('--color-1-dark', 'hsl(' + settings.color0 + ', 65%, 35%)');
+  document.documentElement.style.setProperty('--color-2', 'hsl(' + settings.color1 + ', 50%, 50%)');
+  document.documentElement.style.setProperty('--color-2-dark', 'hsl(' + settings.color1 + ', 65%, 35%)');
+  document.documentElement.style.setProperty('--color-3', 'hsl(' + settings.color2 + ', 50%, 50%)');
+  document.documentElement.style.setProperty('--color-3-dark', 'hsl(' + settings.color2 + ', 65%, 35%)');
+}

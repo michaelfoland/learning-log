@@ -79,7 +79,7 @@ function handleInput(e) {
 }
   
 function getDarkColor(hue) {
-  return 'hsl(' + hue + ', 75%, 25%)';
+  return 'hsl(' + hue + ', 65%, 35%)';
 }
 
 function getLightColor(hue) {

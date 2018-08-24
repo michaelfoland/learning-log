@@ -1,9 +1,61 @@
-import * as settings from './settings';
+// import * as settings from './settings';
 import Datastore from '../node_modules/nedb/browser-version/out/nedb'; // I think this is right
 
 // load the db
-let learningLog = new Datastore({filename: 'learningLog', autoload: true });
+let learningLog = new Datastore({filename: 'learningLog', autoload: true, onload: onload, timestampData: true });
+let settings = new Datastore({filename: 'settings', autoload: true, onload: onload});
 
+let dbReady = false;
+let maxChecks = 3;
+let timeBetweenChecks = 1000;
+
+function onload(err) {
+  if (settings && learningLog) dbReady = true;
+  
+  if (err) console.log(err);
+}
+
+export function isReady(checkNum) {
+  if (checkNum == null) checkNum = 0;
+  
+  return new Promise((resolve, reject) => {
+    if (dbReady) {
+      resolve(true);
+    } else if (checkNum === maxChecks) {
+      reject('db didn\'t load after ' + maxChecks + ' checks');
+    } else {
+      setTimeout(() => {
+        isReady(checkNum + 1)
+          .then(
+            result => resolve(true),
+            err => reject(err)
+          );
+      }, timeBetweenChecks);
+    }
+  });
+}
+
+export function getSettings() {
+  return new Promise((resolve, reject) => {
+    settings.findOne({}, (err, doc) => {
+      if (err) reject('error querying settings');
+      
+      resolve(doc);
+    });
+  });
+}
+
+export function updateSettings(newSettings) {
+  return new Promise((resolve, reject) => {
+    settings.update({},newSettings,{multi: false, upsert: true}, (err, num, docs, upsert) => {
+      if (err) {
+        reject('db error: unable to update settings');
+      } else {
+        resolve(upsert);
+      }
+    });
+  })
+}
 
 export function getAll(prop) {
   let query = {}
@@ -191,9 +243,3 @@ export function add(newEntry) {
   });
 }
 
-export function getSettings() {
-  // for now just returning a dummy object
-  return new Promise((resolve, reject) => {
-    resolve(settings.getSettings());
-  })
-}

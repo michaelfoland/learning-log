@@ -1,5 +1,5 @@
 // This will have more stuff in the future
-let settings = {
+export const defaultSettings = {
   sourceLengthMin: 20,
   sourceLengthDefault: 50,
   sourceLengthUser: 50,
@@ -29,6 +29,9 @@ let settings = {
   color2: 120
 };
 
+// export defaultSettings;
+
+/* 
 let pushSettings = null;
 
 export function setPushSettingsCallback(callback) {
@@ -45,3 +48,4 @@ function updateSettings() {
   // clone settings object; is there a better way?  
   pushSettings(JSON.parse(JSON.stringifiy(settings)));
 }
+*/
