@@ -118,7 +118,7 @@ export function getBySearchString(searchString) {
   
   terms = terms
     .filter(term => term.trim() !== '')
-    .map(term => '\\b' + term + '\\b'); // Need to escape backslash, otherwise javascript understands it as \u0008
+    .map(term => '\\b' + term + '\\b'); // Need to escape \b, otherwise javascript understands it as \u0008
 
   // create queries from search terms
   let queries = [];
@@ -130,6 +130,12 @@ export function getBySearchString(searchString) {
   
   // execute queries on db
   return new Promise((resolve, reject) => {
+    getEntries({$or: queries})
+      .then(
+        result => resolve(result),
+        err => reject(err)
+      );
+    /*
     learningLog.find({ $or: queries}, (err, docs) => {
       if (err) {
         reject('error in getBySearchString(), searching for \''+searchString+'\'');
@@ -138,6 +144,7 @@ export function getBySearchString(searchString) {
       console.log('docs found:',docs);
       resolve(docs);
     });
+    */
   });
 }
 

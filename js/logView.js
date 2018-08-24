@@ -239,7 +239,8 @@ function executeSearch(e) {
   db.getBySearchString(searchInputValue)
     .then(
       result => {
-        updateLogViewDisplay('search',searchInputValue,result);
+        console.log('in executeSearch; result =',result);
+        updateLogViewDisplay('search',searchInputValue,result.docs);
       },
       err => {
         document.getElementById('log-view-display').textContent = 'Error executing search for \'' + searchInputValue + '\'';
