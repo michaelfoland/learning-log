@@ -329,6 +329,7 @@ function checkForm(e) {
     console.log('\tthere are some errors');
     rowsInError.forEach(function(row) {
       document.getElementById(row + '-input').classList.add('error');
+      scrollToTop();
     })
   } else {
     inputs.forEach(function(input) {
@@ -433,44 +434,6 @@ function getCustomCssProp(propName) {
   return getComputedStyle(document.documentElement).getPropertyValue(propName);
 }
 
-/*
-export function displayIn(parentNodeId) {
-  // Get sources and subjects from db
-  bundlePromises([db.getAll('source'),db.getAll('subject')], ['sources','subjects'])
-  .then(
-    result => {
-      updateSources(result.sources),
-      updateSubjects(result.subjects)
-
-      // Render the entryFormTemplate with rowData
-      var rendered = entryFormTemplate({rows: rowData});
-
-      // Put rendered template into document
-      document.getElementById(parentNodeId).innerHTML = rendered;
-  
-      // Set up all listeners/handlers
-      attachListeners();
-      initializeInputFields();
-      initializeDate();
-    },
-    err => console.log('problem from bundlePromises()')
-  );
+function scrollToTop() {
+  window.scrollTo({top: 0,behavior: 'smooth'});
 }
-*/
-
-
-/*
-export function init(callback, sources, subjects) {
-  dbCallback = callback;
-  // are these necessary or can I put data directly into rowData?
-  updateSources(sources); // this updates entryForm state; 
-  updateSubjects(subjects); // this updates entryForm state
-}
-
-
-function handleKeydown(e) {
-  if (e.target.matches('.unlocked-input-value')) {
-    checkForTab(e);
-  }
-}
-*/

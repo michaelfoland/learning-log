@@ -105,11 +105,19 @@ body {
   #main-container {
     padding: 0 .6rem 0 .4rem;
   }
+  
+  .locked-input-value {
+    max-width: 60vw;
+  }
 }
 
 @media (min-width: 600px) {
   #main-container {
     padding: 0em 1rem;
+  }
+  
+  .locked-input-value {
+    max-width: 40vw;
   }
 }
 
@@ -330,6 +338,7 @@ input {
   border-radius: .5em;
   padding: .2em .5em;
   margin: 0 1em 0 0;
+  overflow-wrap: break-word;
 }
 
 .locked-input-button {
@@ -369,6 +378,8 @@ input {
   /* border: solid 1px red; */
 }
 
+
+
 .cloud > span {
   display: inline-block;
   padding: .2em .3em;
@@ -379,6 +390,13 @@ input {
   margin: .4em;
   cursor: pointer;
   transition: all 100ms linear;
+  
+  /* new */
+  overflow: hidden; /* necessary? */
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 60px);
+
 }
 
 .cloud > span:hover {

@@ -13,7 +13,10 @@
 .date-block-header {border: solid 2px hsl(180,50%,50%); box-sizing: border-box;}
 #log-view-filter__sub-button-group { border: solid 2px hsl(90,50%,50%); box-sizing: border-box; }
 .log-entry__source {border: solid 2px hsl(120,50%,50%); box-sizing: border-box;}
+.log-entry__metadata { border: solid 1px hsl(60, 50%, 50%) }
 */
+
+
 
 /* =================
 ===== LOG VIEW =====
@@ -314,7 +317,6 @@
 .log-entry {
   margin: 0em 1em;
   padding: .5em;
-  /* box-sizing: border-box; */
   border-left: solid 2px white; /* color added on hover & .log-entry__selected */
   transition: 
     padding 150ms ease-out,
@@ -355,6 +357,12 @@ not sure how that works in css */
 .log-entry__source, 
 .log-entry__subject {
   display: none;
+  overflow-wrap: break-word;
+  font-size: 1rem;
+  margin: 0 .2em;
+  padding: 0em .3em;
+  max-width: 70vw;
+  box-sizing: border-box;
 }
 
 .log-entry.log-entry__selected > .log-entry__other {
@@ -378,11 +386,8 @@ not sure how that works in css */
 }
 
 .log-entry__source {
-  font-size: 1rem;
   color: var(--color-3);
   border: solid 1px var(--color-3);
-  margin: 0 .2em;
-  padding: 0em .3em;
   transition: all 150ms linear;
 }
 
@@ -393,11 +398,8 @@ not sure how that works in css */
 }
 
 .log-entry__subject {
-  font-size: 1rem;
   color: var(--color-1);
   border: solid 1px var(--color-1);
-  margin: 0 .2em;
-  padding: 0em .3em;
   transition: all 150ms linear;
 }
 
@@ -493,7 +495,7 @@ not sure how that works in css */
   border-radius: .8em;
   transition: all 200ms linear;
   /* height: 1.6rem; */
-  overflow: hidden;
+  /* overflow: hidden; /* necessary? */
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: calc(100% - 60px);
