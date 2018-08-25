@@ -94,7 +94,7 @@ function attachListeners() {
   
   // delegating at a lower level here, to avoid listening to bunches
   // of unnecessary transitions
-  logView.querySelector('#log-view-filter__sub-button-group').addEventListener('transitionend',updateSubButtonNav,false);
+  logView.querySelector('#log-view-filter__sub-button-group').addEventListener('transitionend',handleTransition,false);
 }
 
 function handleKeypress(e) {
@@ -191,6 +191,8 @@ function checkSubButtonPosition() {
     
     slidingContainer.style.marginTop = (slidingContainerFirstChild.getBoundingClientRect().top -
                                        subButtonAnchorEl.getBoundingClientRect().top) + 'px';
+    
+    updateSubButtonNav(slidingContainer.parentElement);
   });
 }
 
@@ -672,6 +674,9 @@ function toggleSubButtonRow(e) {
     // set anchor button 
     if (targetSubButtonRow.dataset.queryType === 'source' || 
        targetSubButtonRow.dataset.queryType === 'subject') {
+      
+      updateSubButtonNav(targetSubButtonRow); // NEW
+      
       let slidingContainer = targetSubButtonRow.querySelector('.sub-button-group__button-container');
       subButtonAnchor = slidingContainer.firstElementChild.dataset.target;  
     }
@@ -783,21 +788,24 @@ function sameDay(date1, date2) {
   return false;
 }
 
-function updateSubButtonNav(e) { 
-  // listen only to events fired by sub-button-group
-  if (!e.target.matches('.sub-button-group__button-container')) return;
+function handleTransition(e) {
+  if (e.target.matches('.sub-button-group__button-container')) updateSubButtonNav(e.target.parentElement);
+}
 
-  console.log('updating sub button nav');
+function updateSubButtonNav(buttonGroup) {
+  console.log('in updateSubButtonNav()');
+  // listen only to events fired by sub-button-group
+  // if (!e.target.matches('.sub-button-group__button-container')) return;
+  console.log('\tbuttonGroup =',buttonGroup);
+  console.log('\tbuttonGroup.querySelector(.sub-button-group__button-container)',buttonGroup.querySelector('.sub-button-group__button-container'));
   
+
   // log rects of target and parent
-  let targetRect = e.target.getBoundingClientRect();
-  let parentRect = e.target.parentElement.getBoundingClientRect();
+  let targetRect = buttonGroup.querySelector('.sub-button-group__button-container').getBoundingClientRect();
+  let parentRect = buttonGroup.getBoundingClientRect();
   
-  let upButton = e.target.parentElement.querySelector('.previous-row-button')
-  let downButton = e.target.parentElement.querySelector('.next-row-button')
-  
-  console.log('target top | parent top:',targetRect.top,'|',parentRect.top);
-  console.log('target bottom | parent bottom:',targetRect.bottom,'|',parentRect.bottom);
+  let upButton = buttonGroup.querySelector('.previous-row-button')
+  let downButton = buttonGroup.querySelector('.next-row-button')
   
   upButton.style.display = Math.abs(targetRect.top - parentRect.top) < 1 ? 'none' : 'inline-block';
   downButton.style.display = Math.abs(targetRect.bottom - parentRect.bottom) < 1 ? 'none' : 'inline-block';
