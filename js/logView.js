@@ -48,6 +48,8 @@ export function render() {
         cacheEntries(result.entries.docs);
         
         let dateBlocks = createDateBlocks(getEntriesToDisplay());
+
+        if (inLastChunk()) hideShowMoreButton();
         
         let myObj = {};
         myObj.sources = result.sources;
@@ -236,6 +238,8 @@ function handleClick(e) {
     
   } else if (e.target.matches('#custom-date-filter-button')) {
     filterEntriesByDateRange(e);
+  } else if (e.target.matches('.log-view-more__button')) {
+    showMoreEntries(); 
   }
 }
 
@@ -392,6 +396,10 @@ function clearFilter() {
                 
         let dateBlocks = createDateBlocks(getEntriesToDisplay());
         document.getElementById('log-view-display').innerHTML = logViewDisplay(dateBlocks);
+  
+        if (inLastChunk()) hideShowMoreButton(); 
+
+        scrollToTop();        
       },
       error => {
         // just log to console for now
@@ -730,16 +738,20 @@ function updateLogViewDisplay(filterType, filterContent, logEntries) {
   filterMessageEl.className = '';
   filterMessageEl.classList.add(filterType);
   
-  let dateBlocks = createDateBlocks(entriesToDisplay); 
-  
   // if we're in a small screen size (<600px, hide sub button row)
   if (window.innerWidth < 600) {
     hideSubButtonRow();
   }
+
+  document.getElementById('log-view-filter__message').style.display = 'block';   
   
-  document.getElementById('log-view-filter__message').style.display = 'block'; 
-  
+  let dateBlocks = createDateBlocks(entriesToDisplay); 
+    
   document.getElementById('log-view-display').innerHTML = logViewDisplay(dateBlocks); 
+  
+  if (inLastChunk()) hideShowMoreButton(); 
+  
+  scrollToTop();
 }
 
 function createDateBlocks(entries) {
@@ -843,10 +855,51 @@ function chunkEntries(entries) {
 
 function cacheEntries(entries) {
   allEntries = entries;
-  currentlyVisibleChunk = 0;
+  currentlyVisibleChunk = 0; 
   chunkedEntries = chunkEntries(allEntries);
 }
 
 function getEntriesToDisplay() {
-  return chunkedEntries[currentlyVisibleChunk];
+  let entries = [];
+  
+  for (let i = 0; i <= currentlyVisibleChunk; i++) {
+    entries.push(...chunkedEntries[i]);
+  }
+  return entries;
+}
+
+
+function inLastChunk() {
+  console.log('=== inLastChunk, about to return',currentlyVisibleChunk + 1 === chunkedEntries.length);
+  return currentlyVisibleChunk + 1 === chunkedEntries.length;
+}
+
+function hideShowMoreButton() {
+  console.log('=== hideShowMoreButton() ===');
+  
+  let showMoreContainer = logView.querySelector('.log-view-more__container');
+  
+  console.log('\tshowMoreContainer =',showMoreContainer);
+  
+  if (showMoreContainer) showMoreContainer.classList.add('log-view-more__container--hidden');
+}
+
+function showMoreEntries() {
+  // go to the next chunk
+  currentlyVisibleChunk += 1; 
+  let dateBlocks = createDateBlocks(getEntriesToDisplay()); 
+ 
+  document.getElementById('log-view-display').innerHTML = logViewDisplay(dateBlocks); 
+  
+  // NOTE: This must come after the preceding line.  Otherwise, the
+  // added class is lost when the innerHTML of #log-view-display is updated
+  if (inLastChunk()) hideShowMoreButton(); 
+}
+
+function scrollToTop() {
+  console.log('=== scrollToTop() ===');
+  setTimeout(() => {
+    window.scrollTo( {top: 0, behavior: 'smooth' });  
+  }, 50); 
+  // in setTimeout prevents some odd behavior where this method is called but we somehow only scroll up partway;
 }

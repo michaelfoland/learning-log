@@ -595,3 +595,28 @@ span.future-date::before {
   stroke: var(--color-3); 
 }
 
+.log-view-more__container {
+  display: flex;
+  justify-content: center;
+  margin: 1em;
+}
+
+.log-view-more__container--hidden {
+  display: none;
+}
+
+.log-view-more__button {
+  font-size: 1.4rem;
+  padding: .1em .5em;
+  border-radius: 1em;
+  margin: 0 .25em;
+
+  color: white;
+  background-color: var(--color-1);
+  transition: all 150ms linear;
+
+}
+
+.log-view-more__button:hover {
+  box-shadow: 0 0 .3em .1em var(--color-1);
+}

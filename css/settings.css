@@ -180,12 +180,11 @@ input::-webkit-inner-spin-button {
   align-items: center;
 }
 
-#settings-panel__reset-button {
-  color: var(--color-1);
-  border: solid 1px var(--color-1);
-  background-color: white;
-  transition: all 150ms linear;
-  /* box-sizing: border-box; */
+.settings-panel-button {
+  font-size: 1.4rem;
+  padding: .1em .5em;
+  border-radius: 1em;
+  margin: 0 .25em;
 }
 
 #settings-panel__save-button {
@@ -198,14 +197,16 @@ input::-webkit-inner-spin-button {
   box-shadow: 0 0 .3em .1em var(--color-1);
 }
 
+#settings-panel__reset-button {
+  color: var(--color-1);
+  border: solid 1px var(--color-1);
+  background-color: white;
+  transition: all 150ms linear;
+  /* box-sizing: border-box; */
+}
+
 #settings-panel__reset-button:hover {
   box-shadow: 0 0 .3em .1em var(--color-1);
   border-color: white;
 }
 
-.settings-panel-button {
-  font-size: 1.4rem;
-  padding: .1em .5em;
-  border-radius: 1em;
-  margin: 0 .25em;
-}
