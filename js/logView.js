@@ -6,6 +6,12 @@ import { insertSpacers } from './fixed-spacer';
 let db;
 let settings;
 let logView;
+
+let allEntries;
+let chunkedEntries = [];
+let currentlyVisibleChunk;
+
+
 let fixedSpacerObserver = new MutationObserver(mutations => {
   if (mutations.some(mutation => {
     return mutation.attributeName === 'class' || mutation.attributeName === 'style';
@@ -33,15 +39,16 @@ export function render() {
   return bundlePromises([
       db.getByFrequency('subject'),
       db.getByFrequency('source'),
-      db.getEntries({},{date: -1},settings.entriesPerPage)
+      db.getEntries({})
     ],
     ['subjects','sources','entries']
   )
     .then(
       result => {
-        console.log('all docs =',result.entries.docs);
+        cacheEntries(result.entries.docs);
         
-        let dateBlocks = createDateBlocks(result.entries.docs);
+        let dateBlocks = createDateBlocks(getEntriesToDisplay());
+        
         let myObj = {};
         myObj.sources = result.sources;
         myObj.subjects = result.subjects;
@@ -381,7 +388,9 @@ function clearFilter() {
     .then(
       result => {
         // Chunk and render content
-        let dateBlocks = createDateBlocks(result.docs);
+        cacheEntries(result.docs);
+                
+        let dateBlocks = createDateBlocks(getEntriesToDisplay());
         document.getElementById('log-view-display').innerHTML = logViewDisplay(dateBlocks);
       },
       error => {
@@ -461,7 +470,7 @@ function filterEntriesByDateRange(e) {
   query.date.$lte = endDate;
 
     // Execute query
-  db.getEntries(query, {date: -1},settings.entriesPerPage)
+  db.getEntries(query)
     .then(
       result => {
         updateLogViewDisplay('date-range',{startDate: getDateString(startDate), endDate: getDateString(endDate)},result.docs);
@@ -503,7 +512,7 @@ function filterEntriesByDateKeyword(queryContent) {
   }
   
   // Execute query
-  db.getEntries(query, {date: -1},settings.entriesPerPage)
+  db.getEntries(query)
     .then(
       result => {
         updateLogViewDisplay('date-keyword',queryContent.replace('-',' '),result.docs);
@@ -529,7 +538,7 @@ function filterEntries(queryType, queryContent) {
   let query = {};
   query[queryType] = queryContent;
   
-  db.getEntries(query,{date: -1},settings.entriesPerPage)
+  db.getEntries(query)
     .then(
       result => {
         updateLogViewDisplay(queryType, queryContent, result.docs);
@@ -684,6 +693,10 @@ function toggleSubButtonRow(e) {
 }
 
 function updateLogViewDisplay(filterType, filterContent, logEntries) {
+  cacheEntries(logEntries);
+  
+  let entriesToDisplay = getEntriesToDisplay();
+  
   // Get ref to element for displaying filter message
   let filterMessageEl = document.getElementById('log-view-filter__message-text');
   
@@ -691,7 +704,7 @@ function updateLogViewDisplay(filterType, filterContent, logEntries) {
   let filterMessageText = '';
   
   // Check whether there were any results
-  if (logEntries.length === 0) {
+  if (entriesToDisplay.length === 0) {
     filterMessageText = 'Found no log entries ';
   } else {
     filterMessageText = 'Currently displaying log entries ';
@@ -717,7 +730,7 @@ function updateLogViewDisplay(filterType, filterContent, logEntries) {
   filterMessageEl.className = '';
   filterMessageEl.classList.add(filterType);
   
-  let dateBlocks = createDateBlocks(logEntries); 
+  let dateBlocks = createDateBlocks(entriesToDisplay); 
   
   // if we're in a small screen size (<600px, hide sub button row)
   if (window.innerWidth < 600) {
@@ -809,4 +822,31 @@ function updateSubButtonNav(buttonGroup) {
   
   upButton.style.display = Math.abs(targetRect.top - parentRect.top) < 1 ? 'none' : 'inline-block';
   downButton.style.display = Math.abs(targetRect.bottom - parentRect.bottom) < 1 ? 'none' : 'inline-block';
+}
+
+
+function chunkEntries(entries) {
+  let chunks = [];
+  let chunkSize = Number(settings.entriesPerPageUser);  // this shouldn't be necessary, you should make sure that it always is a number before inserting it into db
+  let totalChunks = Math.ceil(entries.length / chunkSize);
+  
+  for (let i = 0; i < totalChunks; i++) {
+    let start = i * chunkSize;
+    let end = start + chunkSize;
+
+    console.log('for chunk',(i+1),'start =',start,'end =',end);
+    chunks.push(entries.slice(start, end));
+  }
+  
+  return chunks;
+}
+
+function cacheEntries(entries) {
+  allEntries = entries;
+  currentlyVisibleChunk = 0;
+  chunkedEntries = chunkEntries(allEntries);
+}
+
+function getEntriesToDisplay() {
+  return chunkedEntries[currentlyVisibleChunk];
 }
