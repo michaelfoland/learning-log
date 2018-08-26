@@ -97,6 +97,10 @@ function attachMutationObservers() {
 }
 
 function attachListeners() {
+  // FOR DEBUGGING ONLY
+  
+  
+  
   // add click handlers for .log-entry objects
   logView.addEventListener('click',handleClick,false);
 
@@ -349,15 +353,20 @@ function slideSubButtonRow(e) {
   // check that we can move forward
   let frame = document.getElementById('log-view-filter__sub-button-group');
   let slidingContainer = document.querySelector('.sub-button-group.active-group > .sub-button-group__button-container');
-  let currentTopMargin = Number.parseInt(slidingContainer.style.marginTop) || 0;
+  let currentTopMargin = Number.parseFloat(slidingContainer.style.marginTop) || 0;
 
+  
+  console.log('=== slideSubButtonRow()');
+    
   if (direction === 'forward') {
   
     if (!lastElementIsInFrame(slidingContainer, frame)) {
       // find first element in next visible row
       subButtonAnchor = findFirstElementInNextSubButtonRow();
       
-      slidingContainer.style.marginTop = (currentTopMargin - frame.clientHeight) + 'px';
+      slidingContainer.style.marginTop = (currentTopMargin - getSubButtonFullHeight(slidingContainer.firstElementChild)) + 'px';
+      
+      console.log('slidingContainer.style.marginTop now =',slidingContainer.style.marginTop);
     } 
     
   } else if (direction === 'backward') {
@@ -369,7 +378,9 @@ function slideSubButtonRow(e) {
       // this is not right (REALLY?), though it is ok for getting the appropriate height
       subButtonAnchor = findFirstElementInPreviousSubButtonRow();
       
-      slidingContainer.style.marginTop = (currentTopMargin + frame.clientHeight) + 'px';
+      slidingContainer.style.marginTop = (currentTopMargin + getSubButtonFullHeight(slidingContainer.firstElementChild)) + 'px';
+      
+      console.log('slidingContainer.style.marginTop now =',slidingContainer.style.marginTop);
     }
   }
 }
@@ -835,22 +846,21 @@ function handleTransition(e) {
 }
 
 function updateSubButtonNav(buttonGroup) {
-  console.log('in updateSubButtonNav()');
   // listen only to events fired by sub-button-group
   // if (!e.target.matches('.sub-button-group__button-container')) return;
-  console.log('\tbuttonGroup =',buttonGroup);
-  console.log('\tbuttonGroup.querySelector(.sub-button-group__button-container)',buttonGroup.querySelector('.sub-button-group__button-container'));
-  
 
   // log rects of target and parent
   let targetRect = buttonGroup.querySelector('.sub-button-group__button-container').getBoundingClientRect();
   let parentRect = buttonGroup.getBoundingClientRect();
   
+  // console.log('targetTop =',targetRect.top,' parentTop =',parentRect.top);
+  // console.log('targetBottom =',targetRect.bottom,' parentBottom =',parentRect.bottom);
+  
   let upButton = buttonGroup.querySelector('.previous-row-button')
   let downButton = buttonGroup.querySelector('.next-row-button')
   
-  upButton.style.display = Math.abs(targetRect.top - parentRect.top) < 1 ? 'none' : 'inline-block';
-  downButton.style.display = Math.abs(targetRect.bottom - parentRect.bottom) < 1 ? 'none' : 'inline-block';
+  upButton.style.display = Math.abs(targetRect.top - parentRect.top) < 5 ? 'none' : 'inline-block';
+  downButton.style.display = Math.abs(targetRect.bottom - parentRect.bottom) < 5 ? 'none' : 'inline-block';
 }
 
 
@@ -926,4 +936,9 @@ function scrollToTop() {
     window.scrollTo( {top: 0, behavior: 'smooth' });  
   }, 50); 
   // in setTimeout prevents some odd behavior where this method is called but we somehow only scroll up partway;
+}
+
+function getSubButtonFullHeight(subButton) {
+  let style = window.getComputedStyle(subButton);
+  return subButton.offsetHeight + parseFloat(style.marginTop) + parseFloat(style.marginBottom);
 }

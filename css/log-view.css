@@ -22,6 +22,10 @@
 #log-view { box-sizing: border-box; border: solid 1px hsl(70, 50%, 50%);}
 #log-view-filter__message { box-sizing: border-box; border: solid 1px hsl(210, 50%, 50%);}
 #log-view-filter__search-lg { border: solid 2px hsl(350,50%,50%); box-sizing: border-box; }
+#log-view-filter { border: solid 2px hsl(0,50%,50%); box-sizing: border-box; }
+#log-view-filter__sub-button-group { border: solid 2px hsl(90,50%,50%); box-sizing: border-box; }
+.sub-button-group { border: solid 2px hsl(180,50%,50%); box-sizing: border-box; }
+
 */
 
 
@@ -79,7 +83,7 @@
 
 #log-view-filter__button-group {
   grid-area: button;
-  width: 100%;
+  /* width: 100%; */
   box-sizing: border-box;
 }
 
@@ -134,8 +138,9 @@
 
 .fixed-container {
   align-items: flex-start; 
-  max-height: 2.4rem;     
+  height: 2.4rem;     
   overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .sub-button-group {
@@ -143,7 +148,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start; /* not sure about this */
-  width: 100%;
+  /* width: 100%; */
   box-sizing: border-box;
 }
 
@@ -168,7 +173,8 @@
   align-items: center; 
   transition: margin 300ms linear;
   box-sizing: border-box;
-  max-width: calc(100% - 60px);
+  max-width: calc(100% - 70px);
+  padding: 0;
 }
 
 #custom-date-search {
@@ -215,7 +221,7 @@
 #log-view-filter__date-keyword-buttons {
   /* flex-grow: 1; */
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   flex-wrap: nowrap; 
   /* border: solid 1px yellow; */
 }
@@ -503,19 +509,19 @@ not sure how that works in css */
 }
 
 .sub-button {
-  font-size: .9em;
+  font-size: .9rem;
   line-height: 1rem;
-  padding: .3em .3em;
-  margin: .4em .2em;
-  border: solid 1px black; /* in the future, determine color by type of button */
+  padding: .3rem .3rem;
+  margin: .4rem .2rem;
+  border: solid 1px;
   border-radius: .8em;
   transition: all 200ms linear;
-  /* height: 1.6rem; */
-  overflow: hidden; /* necessary? yes */
+  
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: 70%;
-  /* box-sizing: border-box; */
+  
   
 }
 
@@ -635,4 +641,8 @@ span.future-date::before {
 
 .log-view-more__button:hover {
   box-shadow: 0 0 .3em .1em var(--color-1);
+}
+
+.date-keyword-button {
+  font-size: .85rem;
 }
