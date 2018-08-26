@@ -45,12 +45,12 @@ export function render() {
   )
     .then(
       result => {
+        
         cacheEntries(result.entries.docs);
         
+        console.log('in logView.js render(), already cached entries; currentlyVisibleChunk now =',currentlyVisibleChunk);
+        
         let dateBlocks = createDateBlocks(getEntriesToDisplay());
-        
-        console.log('dateBlocks =',dateBlocks);
-        
         
         let myObj = {};
         myObj.sources = result.sources;
@@ -67,10 +67,15 @@ export function render() {
   }
 
 export function postRender() {
+  console.log('=== postRender() ===');
+  console.log('\t currentlyVisibleChunk =',currentlyVisibleChunk);
   // get ref to logView
   logView = document.getElementById(id);
 
-  if (noMoreEntries()) hideShowMoreButton();
+  if (noMoreEntries()) {
+    console.log('about to hide show more button');
+    hideShowMoreButton();
+  }
   
   // insert spacer under log-view-filter;
   insertSpacers('#log-view-filter');
@@ -751,10 +756,8 @@ function updateLogViewDisplay(filterType, filterContent, logEntries) {
   console.log('\tfilterMessageText =',filterMessageText);
   
   // if we're in a small screen size (<600px, hide sub button row)
-  if (window.innerWidth < 600) {
-    hideSubButtonRow();
-  }
-  
+  hideSubButtonRow();
+    
   document.getElementById('log-view-filter__message').style.display = 'block';   
   
   let dateBlocks = createDateBlocks(entriesToDisplay); 
@@ -871,7 +874,6 @@ function cacheEntries(entries) {
   allEntries = entries;
   currentlyVisibleChunk = 0; 
   chunkedEntries = chunkEntries(allEntries);
-  console.log('at end of cacheEntries, chunkedEntries =',chunkedEntries);
 }
 
 function getEntriesToDisplay() {
@@ -891,16 +893,7 @@ function getEntriesToDisplay() {
 
 function noMoreEntries() {
   console.log('=== noMoreEntries() ===');
-  
-  if (currentlyVisibleChunk) {
-    console.log('\tcurrentlyVisibleChunk =',currentyVisibleChunk);
-  } else {
-    console.log('\tcurrentlyVisibleChunk is undefined');
-  }
-  
-  console.log('\tchunkedEntries.length =',chunkedEntries.length);
-    
-  if (!currentlyVisibleChunk) return true;
+  if (currentlyVisibleChunk == null) return true;
   
   return currentlyVisibleChunk + 1 === chunkedEntries.length;
 }

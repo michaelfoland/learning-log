@@ -24,19 +24,13 @@
 ===== PERSONAL CSS RESETS =====
 ============================ */
 
-body { 
-  margin: 0;
-  padding: 0;
-}
-
-div {
+body, div, p { 
   margin: 0;
   padding: 0;
 }
 
 button, input, textarea {
   font-family: unset;
-  /* cursor: unset; */
   width: unset;
 }
 

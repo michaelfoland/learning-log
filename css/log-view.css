@@ -14,8 +14,15 @@
 #log-view-filter__sub-button-group { border: solid 2px hsl(90,50%,50%); box-sizing: border-box; }
 .log-entry__source {border: solid 2px hsl(120,50%,50%); box-sizing: border-box;}
 .log-entry__metadata { border: solid 1px hsl(60, 50%, 50%) }
-*/
 
+#log-view-filter { box-sizing: border-box; border: solid 1px hsl(140, 50%, 50%);}
+#log-view-filter__button-group { border: solid 2px hsl(1280,50%,50%); box-sizing: border-box; }
+
+#main-container { box-sizing: border-box; border: solid 1px hsl(0, 50%, 50%);}
+#log-view { box-sizing: border-box; border: solid 1px hsl(70, 50%, 50%);}
+#log-view-filter__message { box-sizing: border-box; border: solid 1px hsl(210, 50%, 50%);}
+#log-view-filter__search-lg { border: solid 2px hsl(350,50%,50%); box-sizing: border-box; }
+*/
 
 
 /* =================
@@ -33,6 +40,7 @@
   #log-view-filter {
     padding-top: .2rem; /* moved from #log-view to prevent visibility of scrolling content */
     width: calc(100vw - 1rem);    
+    
   }
 }
 
@@ -71,6 +79,8 @@
 
 #log-view-filter__button-group {
   grid-area: button;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 @media (min-width: 600px) {
@@ -146,12 +156,12 @@
 }
 
 .sub-button-group.active-group .next-row-button {
-  display: inline-block;  
+  display: none;  
 }
 
 .sub-button-group__button-container {
   display: flex;
-  flex-grow: 1;
+  /* flex-grow: 1; */
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: flex-start; 
@@ -288,7 +298,7 @@
 }
 
 #log-view-display {
-  margin: 0 auto;
+  margin: 0 auto 2em auto;
 }
 
 @media (min-width: 900px) {
@@ -443,18 +453,23 @@ not sure how that works in css */
   font-size: 1rem;
   grid-area: message;
   display: none;
+  width: 90vw; 
   /*
   justify-content: center;
   flex-wrap: wrap;
   align-items: flex-start;
   */
+  text-align: center;
+  overflow-wrap: break-word;
   box-sizing: border-box;
 }
 
+/*
 #log-view-filter__message-text {
-  display: inline; 
-  text-align: center;
+  display: block; 
+  width: 90vw;
 }
+*/
 
 #log-view-filter__message-text.subject {
   color: var(--color-1);
@@ -499,7 +514,7 @@ not sure how that works in css */
   overflow: hidden; /* necessary? yes */
   white-space: nowrap;
   text-overflow: ellipsis;
-  max-width: calc(100% - 60px);
+  max-width: 70%;
   /* box-sizing: border-box; */
   
 }
