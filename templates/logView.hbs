@@ -42,6 +42,14 @@
       <button type="button" role="button" id="log-view-filter__message-button">(clear filter)</button>
     </div>
   </div>
+  
+  {{#if initial}}
+  <div class="log-view__welcome">
+    <h2>It looks like there's nothing in your log yet.  Click on the <strong>Add Items</strong> button above to get started!</h2>
+  </div>
+  {{/if}}
+  
+  
   <div id="log-view-display">
     {{> logViewDisplay dateBlocks }}
   </div>

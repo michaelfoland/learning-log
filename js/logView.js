@@ -39,7 +39,7 @@ export function render() {
   return bundlePromises([
       db.getByFrequency('subject'),
       db.getByFrequency('source'),
-      db.getEntries({})
+      db.getAllEntries()
     ],
     ['subjects','sources','entries']
   )
@@ -48,13 +48,17 @@ export function render() {
         cacheEntries(result.entries.docs);
         
         let dateBlocks = createDateBlocks(getEntriesToDisplay());
-
-        if (inLastChunk()) hideShowMoreButton();
+        
+        console.log('dateBlocks =',dateBlocks);
+        
         
         let myObj = {};
         myObj.sources = result.sources;
         myObj.subjects = result.subjects;
         myObj.dateBlocks = dateBlocks;
+        myObj.initial = (allEntries.length === 0);
+        
+        console.log('about to render template with myObj =',myObj);
         
         return logViewTemplate(myObj);
       },
@@ -65,6 +69,8 @@ export function render() {
 export function postRender() {
   // get ref to logView
   logView = document.getElementById(id);
+
+  if (noMoreEntries()) hideShowMoreButton();
   
   // insert spacer under log-view-filter;
   insertSpacers('#log-view-filter');
@@ -397,7 +403,7 @@ function clearFilter() {
         let dateBlocks = createDateBlocks(getEntriesToDisplay());
         document.getElementById('log-view-display').innerHTML = logViewDisplay(dateBlocks);
   
-        if (inLastChunk()) hideShowMoreButton(); 
+        if (noMoreEntries()) hideShowMoreButton(); 
 
         scrollToTop();        
       },
@@ -701,9 +707,13 @@ function toggleSubButtonRow(e) {
 }
 
 function updateLogViewDisplay(filterType, filterContent, logEntries) {
+  console.log('=== updateLogViewDisplay() ===');
+  
   cacheEntries(logEntries);
   
   let entriesToDisplay = getEntriesToDisplay();
+  
+  console.log('\tentriesToDisplay =',entriesToDisplay);
   
   // Get ref to element for displaying filter message
   let filterMessageEl = document.getElementById('log-view-filter__message-text');
@@ -738,20 +748,24 @@ function updateLogViewDisplay(filterType, filterContent, logEntries) {
   filterMessageEl.className = '';
   filterMessageEl.classList.add(filterType);
   
+  console.log('\tfilterMessageText =',filterMessageText);
+  
   // if we're in a small screen size (<600px, hide sub button row)
   if (window.innerWidth < 600) {
     hideSubButtonRow();
   }
-
+  
   document.getElementById('log-view-filter__message').style.display = 'block';   
   
   let dateBlocks = createDateBlocks(entriesToDisplay); 
     
   document.getElementById('log-view-display').innerHTML = logViewDisplay(dateBlocks); 
   
-  if (inLastChunk()) hideShowMoreButton(); 
+  if (noMoreEntries()) hideShowMoreButton(); 
   
   scrollToTop();
+  
+  console.log('=== end updateLogViewDisplay() ===');
 }
 
 function createDateBlocks(entries) {
@@ -857,20 +871,37 @@ function cacheEntries(entries) {
   allEntries = entries;
   currentlyVisibleChunk = 0; 
   chunkedEntries = chunkEntries(allEntries);
+  console.log('at end of cacheEntries, chunkedEntries =',chunkedEntries);
 }
 
 function getEntriesToDisplay() {
+  console.log('=== getEntriesToDisplay() ===');
+  
   let entries = [];
+  
+  if (allEntries.length === 0) return entries;
   
   for (let i = 0; i <= currentlyVisibleChunk; i++) {
     entries.push(...chunkedEntries[i]);
   }
+  
+  console.log('=== end getEntriesToDisplay() ===');
   return entries;
 }
 
-
-function inLastChunk() {
-  console.log('=== inLastChunk, about to return',currentlyVisibleChunk + 1 === chunkedEntries.length);
+function noMoreEntries() {
+  console.log('=== noMoreEntries() ===');
+  
+  if (currentlyVisibleChunk) {
+    console.log('\tcurrentlyVisibleChunk =',currentyVisibleChunk);
+  } else {
+    console.log('\tcurrentlyVisibleChunk is undefined');
+  }
+  
+  console.log('\tchunkedEntries.length =',chunkedEntries.length);
+    
+  if (!currentlyVisibleChunk) return true;
+  
   return currentlyVisibleChunk + 1 === chunkedEntries.length;
 }
 
@@ -879,7 +910,7 @@ function hideShowMoreButton() {
   
   let showMoreContainer = logView.querySelector('.log-view-more__container');
   
-  console.log('\tshowMoreContainer =',showMoreContainer);
+  console.log('typeof showMoreContainer =', typeof showMoreContainer);
   
   if (showMoreContainer) showMoreContainer.classList.add('log-view-more__container--hidden');
 }
@@ -893,7 +924,7 @@ function showMoreEntries() {
   
   // NOTE: This must come after the preceding line.  Otherwise, the
   // added class is lost when the innerHTML of #log-view-display is updated
-  if (inLastChunk()) hideShowMoreButton(); 
+  if (noMoreEntries()) hideShowMoreButton(); 
 }
 
 function scrollToTop() {

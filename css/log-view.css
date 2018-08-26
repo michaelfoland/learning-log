@@ -151,6 +151,7 @@
 
 .sub-button-group__button-container {
   display: flex;
+  flex-grow: 1;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: flex-start; 
@@ -495,7 +496,7 @@ not sure how that works in css */
   border-radius: .8em;
   transition: all 200ms linear;
   /* height: 1.6rem; */
-  /* overflow: hidden; /* necessary? */
+  overflow: hidden; /* necessary? yes */
   white-space: nowrap;
   text-overflow: ellipsis;
   max-width: calc(100% - 60px);
