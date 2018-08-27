@@ -64,6 +64,8 @@ function getSourcesAndSubjects() {
 function addItemToDb(obj) {
   console.log('=== entry-form: adding item to db');
   
+  console.log(obj);
+  
   
   db.add(obj)
     .then(

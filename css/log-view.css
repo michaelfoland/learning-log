@@ -69,6 +69,10 @@
       "message message";
     width: calc(100vw - 2rem);
   }
+  
+  #log-view-filter__search-sub-buttons {
+    display: none;
+  }
 }
 
 @media (max-width: 599.98px) {

@@ -798,7 +798,7 @@ function createDateBlocks(entries) {
 }
 
 function getDateString(date) {
-  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric', day: 'numeric'})
+  return date.toLocaleDateString('en-US',{ timeZone: 'UTC', month: 'long', year: 'numeric', day: 'numeric'});
 }
 
 function getEndOfToday() {
