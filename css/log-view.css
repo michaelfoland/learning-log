@@ -8,6 +8,7 @@
 #log-view-filter__button-group { border: solid 2px hsl(150,50%,50%); box-sizing: border-box; }
 #log-view-filter__search { border: solid 2px hsl(300,50%,50%); box-sizing: border-box; }
 
+
 #log-view-display { border: solid 2px hsl(240,50%,50%); box-sizing: border-box;}
 .log-entry { border: solid 2px hsl(30,50%,50%); box-sizing: border-box;}
 .date-block-header {border: solid 2px hsl(180,50%,50%); box-sizing: border-box;}
@@ -28,7 +29,6 @@
 
 */
 
-
 /* =================
 ===== LOG VIEW =====
 ================= */
@@ -38,6 +38,7 @@
   /* padding-top: .8rem; */
   cursor: default;
   background: #fff;
+  box-sizing: border-box;
 }
 
 @media (max-width: 599.98px) {
@@ -67,7 +68,8 @@
       "button search"
       "subButton subButton"
       "message message";
-    width: calc(100vw - 2rem);
+      width: calc(100vw - 2rem);
+      
   }
   
   #log-view-filter__search-sub-buttons {
@@ -87,7 +89,6 @@
 
 #log-view-filter__button-group {
   grid-area: button;
-  /* width: 100%; */
   box-sizing: border-box;
 }
 
@@ -135,7 +136,7 @@
 #log-view-filter__sub-button-group {
   grid-area: subButton;
   display: block;
-  max-width: 100%;
+  /* max-width: 100%; */
   overflow: hidden;
 }
 
@@ -170,7 +171,7 @@
 
 .sub-button-group__button-container {
   display: flex;
-  /* flex-grow: 1; */
+  flex-grow: 1;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: flex-start; 
@@ -179,6 +180,23 @@
   box-sizing: border-box;
   max-width: calc(100% - 70px);
   padding: 0;
+  /*border: solid 2px black; */
+}
+
+
+.sub-button {
+  font-size: .9rem;
+  line-height: 1rem;
+  padding: .3rem .3rem;
+  margin: .4rem .2rem;
+  border: solid 1px;
+  border-radius: .8em;
+  transition: all 200ms linear;
+  
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 70%;
 }
 
 #custom-date-search {
@@ -510,23 +528,6 @@ not sure how that works in css */
 #log-view-filter__message-button:hover {
   color: var(--color-0-dark);
   transform: scale(1.1);
-}
-
-.sub-button {
-  font-size: .9rem;
-  line-height: 1rem;
-  padding: .3rem .3rem;
-  margin: .4rem .2rem;
-  border: solid 1px;
-  border-radius: .8em;
-  transition: all 200ms linear;
-  
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  max-width: 70%;
-  
-  
 }
 
 #custom-date-filter-button {
