@@ -93,6 +93,13 @@ function entryFeedbackTemplatePostRender() {
                                           // sources and subjects into the clouds
     }
   });
+  
+  document.getElementById('new-entry-feedback__entry-form-button').addEventListener('blur', () => {
+    document.getElementById('new-entry-feedback__log-view-button').focus();  
+  });
+  
+  // move focus to entry feedback template
+  document.getElementById('new-entry-feedback__log-view-button').focus();
 }
 
 export function updateSources(newSources) {
@@ -136,6 +143,59 @@ function handleFocus(e) {
   if (e.target.matches('.unlocked-input-value')) {
     removeError(e);
   }
+  
+  let row;
+  
+  if (e.target.closest('.entry-form__row')) {
+    row = e.target.closest('.entry-form__row');
+
+    console.log('fixed spacer height =',getFixedPositionSpacerHeight());
+    console.log('scroll top =',getScrollTop());
+    console.log('row top =', row.getBoundingClientRect().top);
+    
+    e.preventDefault();
+    
+    window.scrollTo({
+      top: getScrollTop() + row.getBoundingClientRect().top - getFixedPositionSpacerHeight(),
+      behavior: 'smooth'
+    });
+  }
+  
+  /*
+  if (e.target.closest('.entry-form__row')) {
+    row = e.target.closest('.entry-form__row');
+    
+    let rowBottom = row.getBoundingClientRect().bottom;
+    
+    if (rowBottom + getScrollTop() + 50 > window.innerHeight) {
+      e.preventDefault();
+
+      window.scrollTo({
+        top: (Math.ceil(rowBottom + 50 - window.innerHeight + getScrollTop())),
+        behavior: 'smooth'
+      });
+    }
+  }
+  
+  if (e.target.closest('.entry-form__button-row')) {
+    row = e.target.closest('.entry-form__button-row');
+
+    let rowBottom = row.getBoundingClientRect().bottom;
+      
+    if (rowBottom + getScrollTop() > window.innerHeight) {
+      e.preventDefault();
+
+      console.log('window.innerHeight =',window.innerHeight);
+      console.log('document.body.scrollHeight =',document.body.scrollHeight);
+      window.scrollTo({
+        top: document.body.scrollHeight - window.innerHeight - 10,
+        behavior: 'smooth'
+      });
+    }
+    
+  }
+  */
+  
 }
 
 function handleClick(e) {
@@ -439,4 +499,19 @@ function getCustomCssProp(propName) {
 
 function scrollToTop() {
   window.scrollTo({top: 0,behavior: 'smooth'});
+}
+
+function getScrollTop() {
+  let scrollTop = Math.floor(document.documentElement.scrollTop || document.body.scrollTop)
+  console.log({scrollTop});
+  return scrollTop;
+}
+
+function getFixedPositionSpacerHeight() {
+  // find height of all spacers
+  let spacers = Array.from(document.getElementsByClassName('fixed-position-spacer'));
+  
+  return spacers.reduce((acc, curr) => {
+    return acc + curr.scrollHeight;
+  }, 0);
 }

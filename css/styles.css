@@ -44,7 +44,7 @@ button {
 ===== CSS CUSTOM PROPS =====
 ========================= */
 :root {
-  --base-font: 'Segoe UI Light', 'helvetica neue', sans-serif;
+  --base-font: 'Segoe UI Light', Tahoma, Geneva, sans-serif;
   --base-color: #68a;
   
   --color-0-light: #999;
@@ -56,7 +56,6 @@ button {
   --color-2-dark: hsl(40, 65%, 35%);
   --color-3: hsl(120, 50%, 50%);
   --color-3-dark: hsl(120, 65%, 35%);
-*/
   
   --color-1: red;
   --color-1-dark: orange;
@@ -64,6 +63,8 @@ button {
   --color-2-dark: green;
   --color-3: blue;
   --color-3-dark: purple;
+
+  */
 }
 
 /* ==========================
@@ -404,6 +405,7 @@ input {
   width: 100%;
   text-align: right;
   margin-top: 1em;
+  box-sizing: border-box;
 }
 
 .entry-form__button-row > button {
