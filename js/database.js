@@ -1,13 +1,17 @@
 // import * as settings from './settings';
 import Datastore from '../node_modules/nedb/browser-version/out/nedb'; // I think this is right
 
-// load the db
+// load the collections
 let learningLog = new Datastore({filename: 'learningLog', autoload: true, onload: onload, timestampData: true });
 let settings = new Datastore({filename: 'settings', autoload: true, onload: onload});
 
+// startup vars
 let dbReady = false;
 let maxChecks = 3;
 let timeBetweenChecks = 1000;
+
+// callbacks to push settings on update
+let callbacks = [];
 
 function onload(err) {
   if (settings && learningLog) dbReady = true;
@@ -46,15 +50,44 @@ export function getSettings() {
 }
 
 export function updateSettings(newSettings) {
+  console.log('old newSettings =',newSettings);
+  
+  sanitizeSettingsObject(newSettings);
+  
+  console.log('new newSettings =',newSettings);
+  
   return new Promise((resolve, reject) => {
     settings.update({},newSettings,{multi: false, upsert: true}, (err, num, docs, upsert) => {
       if (err) {
         reject('db error: unable to update settings');
       } else {
+        console.log('updated settings to',newSettings);
         resolve(docs);
       }
     });
   })
+}
+
+function sanitizeSettingsObject(newSettings) {
+  let settingTypes = ['sourceLength','subjectLength','titleLength','sourcePrompts','subjectPrompts','entriesPerPage'];
+
+  // confirm that all user values are between min and max,
+  // if not, set to default
+  settingTypes.forEach(type => {
+    if (!(newSettings[type + 'User'] <= newSettings[type + 'Max']) ||
+       !(newSettings[type + 'User'] >= newSettings[type + 'Min'])) {
+      newSettings[type + 'User'] = newSettings[type + 'Default'];
+    }
+  });
+  
+  let colors = ['color0','color1','color2'];
+  
+  colors.forEach(color => {
+    if (!(newSettings[color + 'User'] >= 0) || 
+       !(newSettings[color + 'User'] < 360)) {
+      newSettings[color + 'User'] = newSettings[color + 'Default'];
+    }
+  });  
 }
 
 export function getAll(prop) {
@@ -239,3 +272,6 @@ export function add(newEntry) {
   });
 }
 
+export function addPushSettingsCallback(callback) {
+  callbacks.push(callback);  
+}

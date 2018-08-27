@@ -176,6 +176,7 @@ input::-webkit-inner-spin-button {
 
 #settings-button-row {
   display: flex;
+  flex-direction: row;
   justify-content: flex-end;
   align-items: center;
 }
@@ -210,3 +211,7 @@ input::-webkit-inner-spin-button {
   border-color: white;
 }
 
+.invalid-input-feedback__paragraph {
+  padding: .3em .6em;
+  cursor: default;
+}

@@ -1,4 +1,5 @@
 import settingsPanelTemplate from '../templates/settingsPanel.hbs';
+import invalidInputFeedbackTemplate from '../templates/invalidInputFeedback.hbs';
 import * as db from './database';
 export const id = 'settings-panel';
 export const buttonText = 'Settings';
@@ -22,9 +23,6 @@ export function render() {
 export function postRender() {
   // get and cache ref to setting panel el
   settingsPanel = document.getElementById(id);
-  
-  // nothing right now
-  console.log('executing settingsPanel postRender()');
   
   attachListeners();
   
@@ -69,21 +67,64 @@ function handleClick(e) {
 }
 
 function save() {
-  // gather all props
-  gatherInputValues();
+  console.log('=== in save() ===');
   
-  // add them into the settings object
+  let inputEls = Array.from(settingsPanel.querySelectorAll('[data-prop-name]'));
   
+  let updated = false;
+  let fullyValid = true;
+    
+  inputEls.forEach(input => {
+    if (input.value && 
+        !Number.isNaN(parseInt(input.value, 10)) && 
+        parseInt(input.value, 10) !== settings[input.dataset.propName]) {
+      
+      updated = true;
+      
+      if (input.validity.valid) {
+        settings[input.dataset.propName] = parseInt(input.value, 10);        
+      } else {
+        fullyValid = false;
+      }
+    }
+  });
+
   
-  // push the settings object to db.updateSettings();
+  // case: not updated
+  if (!updated) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return; 
+  }
+  
+  // case: updated, but some invalid entries
+  if (updated && !fullyValid) {
+    displayInvalidInputOverlay();
+    return;
+  }
+    
+  // case: updated and valid
+  db.updateSettings(settings)
+    .then(
+      result => {
+        // TODO: display an overlay here on successful update
+        document.getElementById('main-container').innerHTML = settingsPanelTemplate(settings);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        console.log('after updating settings, settings now =',settings);
+        postRender(); // since we're re-rendering the entire view, we need to reattach event listeners, etc.
+      },
+      err => {
+        console.log('error while trying to update settings');
+      }
+    )
+
 }
 
 
 function reset() {
   // reset theme color inputs to their original values
-  settingsPanel.querySelector('#color-1-input').value = settings.color0;
-  settingsPanel.querySelector('#color-2-input').value = settings.color1;
-  settingsPanel.querySelector('#color-3-input').value = settings.color2;
+  settingsPanel.querySelector('#color-1-input').value = settings.color0User;
+  settingsPanel.querySelector('#color-2-input').value = settings.color1User;
+  settingsPanel.querySelector('#color-3-input').value = settings.color2User;
   
   // refresh swatches and css variables to match
   refreshSwatches();
@@ -131,27 +172,22 @@ function getLightColor(hue) {
   return 'hsl(' + hue + ', 50%, 50%)';
 }
 
-function gatherInputValues() {
-  let inputEls = Array.from(settingsPanel.querySelectorAll('[data-prop-name]'));
+function displayInvalidInputOverlay() {
+  let t = invalidInputFeedbackTemplate({});
   
-  let updated = false;
-    
-  inputEls.forEach(input => {
-    if (input.value && input.value !== settings[input.dataset.propName]) {
-      updated = true;
-      settings[input.dataset.propName] = input.value;
-    }
-  });
+  document.getElementById('overlay-content-panel').innerHTML = t;
   
-  db.updateSettings(settings)
-    .then(
-      result => {
-        // TODO: display an overlay here on successful update
-        document.getElementById('main-container').innerHTML = settingsPanelTemplate(settings);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      },
-      err => {
-        console.log('error while trying to update settings');
-      }
-    )
+  document.getElementById('invalid-input-feedback').addEventListener('click', hideOverlay, false);
+  
+  let target = document.getElementById('overlay');
+  target.style.height = document.getElementsByTagName('body')[0].getBoundingClientRect().height + 'px';
+  target.style.display = 'flex';
+  
+  setTimeout(hideOverlay, 2000);
+}
+
+function hideOverlay() {
+  document.getElementById('overlay').style.display = 'none';
+  document.getElementById('overlay-content-panel').innerHTML = '';
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }

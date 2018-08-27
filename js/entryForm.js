@@ -68,11 +68,10 @@ function addItemToDb(obj) {
       error => console.log('ENTRY FORM: got error from promise')
     )
     .finally(() => {
-      // Render the entryFormTemplate with rowData
       let t = newEntryFeedbackTemplate({});
 
       // Put rendered template into document
-      document.getElementById('overlay-content').innerHTML = t;
+      document.getElementById('overlay-content-panel').innerHTML = t;
     
       entryFeedbackTemplatePostRender();
     });

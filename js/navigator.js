@@ -162,8 +162,6 @@ export class Navigator {
     
     
     this.scrollToTop();
-    
-    console.log('at end of changeViews, this._currentlyVisibleId =',this._currentlyVisibleId);
   }
   
   scrollToTop() {

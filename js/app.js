@@ -34,7 +34,6 @@ function checkSettings() {
     )
 }
 
-
 function firstTimeSetup() {
   db.updateSettings(defaultSettings)
     .then(
@@ -46,7 +45,6 @@ function firstTimeSetup() {
       }
     )
 }
-
 
 // SET UP NAVBAR
 let myNav;
@@ -73,12 +71,11 @@ function setup(settings) {
   myNav.navigateTo(logView.id);
 }
 
-
 function setupCssVariables(settings) {
-  document.documentElement.style.setProperty('--color-1', 'hsl(' + settings.color0 + ', 50%, 50%)');
-  document.documentElement.style.setProperty('--color-1-dark', 'hsl(' + settings.color0 + ', 65%, 35%)');
-  document.documentElement.style.setProperty('--color-2', 'hsl(' + settings.color1 + ', 50%, 50%)');
-  document.documentElement.style.setProperty('--color-2-dark', 'hsl(' + settings.color1 + ', 65%, 35%)');
-  document.documentElement.style.setProperty('--color-3', 'hsl(' + settings.color2 + ', 50%, 50%)');
-  document.documentElement.style.setProperty('--color-3-dark', 'hsl(' + settings.color2 + ', 65%, 35%)');
+  document.documentElement.style.setProperty('--color-1', 'hsl(' + settings.color0User + ', 50%, 50%)');
+  document.documentElement.style.setProperty('--color-1-dark', 'hsl(' + settings.color0User + ', 65%, 35%)');
+  document.documentElement.style.setProperty('--color-2', 'hsl(' + settings.color1User + ', 50%, 50%)');
+  document.documentElement.style.setProperty('--color-2-dark', 'hsl(' + settings.color1User + ', 65%, 35%)');
+  document.documentElement.style.setProperty('--color-3', 'hsl(' + settings.color2User + ', 50%, 50%)');
+  document.documentElement.style.setProperty('--color-3-dark', 'hsl(' + settings.color2User + ', 65%, 35%)');
 }
