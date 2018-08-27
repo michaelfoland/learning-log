@@ -16,10 +16,14 @@ let fixedSpacerObserver = new MutationObserver(mutations => {
   if (mutations.some(mutation => {
     return mutation.attributeName === 'class' || mutation.attributeName === 'style';
   })) {
-    // set size of fixed-spacer (which we don't have yet) to size of log-view-filter
-    let spacer = logView.querySelector('.fixed-position-spacer'); // this assumes we'll have only one in the log-view, which is true for now
     
-    spacer.style.height = document.getElementById(spacer.dataset.spacerTarget).getBoundingClientRect().height + 'px';
+    setTimeout(() => {
+      // set size of fixed-spacer (which we don't have yet) to size of log-view-filter
+      let spacer = logView.querySelector('.fixed-position-spacer'); // this assumes we'll have only one in the log-view, which is true for now
+
+      spacer.style.height = document.getElementById(spacer.dataset.spacerTarget).getBoundingClientRect().height + 'px';
+      
+    }, 20);
   }
 });
 
@@ -897,10 +901,9 @@ function getEntriesToDisplay() {
 }
 
 function noMoreEntries() {
-  console.log('=== noMoreEntries() ===');
   if (currentlyVisibleChunk == null) return true;
   
-  return currentlyVisibleChunk + 1 === chunkedEntries.length;
+  return currentlyVisibleChunk + 1 >= chunkedEntries.length;
 }
 
 function hideShowMoreButton() {
