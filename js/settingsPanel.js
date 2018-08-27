@@ -169,10 +169,11 @@ function handleInput(e) {
   let targetSwatch = e.target.dataset.target;
   
   refreshSwatch(targetSwatch, hue);
-  
+ 
+  /* REMOVING THIS FOR NOW
   let colorId = targetSwatch.charAt(targetSwatch.length - 1);
-  
   setCssVariable(colorId, hue);
+  */
 }
   
 function setAllCssVariables() {
