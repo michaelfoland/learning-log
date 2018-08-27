@@ -46,6 +46,25 @@ function updateSettings(newSettings) {
 function attachListeners() {
   settingsPanel.addEventListener('input',handleInput,false);
   settingsPanel.addEventListener('click',handleClick,false);
+  settingsPanel.addEventListener('focus',handleFocus,true);
+}
+
+function handleFocus(e) {
+  
+  let row;
+  
+  if (e.target.closest('.setting-row')) {
+    row = e.target.closest('.setting-row');
+    
+    e.preventDefault();
+    
+    window.scrollTo({
+      top: getScrollTop() + row.getBoundingClientRect().top - getFixedPositionSpacerHeight(),
+      behavior: 'smooth'
+    });
+  }
+  
+  
 }
 
 function refreshSwatch(targetSwatch,hue) {
@@ -194,4 +213,19 @@ function hideOverlay() {
   document.getElementById('overlay').style.display = 'none';
   document.getElementById('overlay-content-panel').innerHTML = '';
   window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function getScrollTop() {
+  let scrollTop = Math.floor(document.documentElement.scrollTop || document.body.scrollTop)
+  console.log({scrollTop});
+  return scrollTop;
+}
+
+function getFixedPositionSpacerHeight() {
+  // find height of all spacers
+  let spacers = Array.from(document.getElementsByClassName('fixed-position-spacer'));
+  
+  return spacers.reduce((acc, curr) => {
+    return acc + curr.scrollHeight;
+  }, 0);
 }

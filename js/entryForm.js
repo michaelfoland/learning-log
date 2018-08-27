@@ -148,10 +148,6 @@ function handleFocus(e) {
   
   if (e.target.closest('.entry-form__row')) {
     row = e.target.closest('.entry-form__row');
-
-    console.log('fixed spacer height =',getFixedPositionSpacerHeight());
-    console.log('scroll top =',getScrollTop());
-    console.log('row top =', row.getBoundingClientRect().top);
     
     e.preventDefault();
     
@@ -160,42 +156,6 @@ function handleFocus(e) {
       behavior: 'smooth'
     });
   }
-  
-  /*
-  if (e.target.closest('.entry-form__row')) {
-    row = e.target.closest('.entry-form__row');
-    
-    let rowBottom = row.getBoundingClientRect().bottom;
-    
-    if (rowBottom + getScrollTop() + 50 > window.innerHeight) {
-      e.preventDefault();
-
-      window.scrollTo({
-        top: (Math.ceil(rowBottom + 50 - window.innerHeight + getScrollTop())),
-        behavior: 'smooth'
-      });
-    }
-  }
-  
-  if (e.target.closest('.entry-form__button-row')) {
-    row = e.target.closest('.entry-form__button-row');
-
-    let rowBottom = row.getBoundingClientRect().bottom;
-      
-    if (rowBottom + getScrollTop() > window.innerHeight) {
-      e.preventDefault();
-
-      console.log('window.innerHeight =',window.innerHeight);
-      console.log('document.body.scrollHeight =',document.body.scrollHeight);
-      window.scrollTo({
-        top: document.body.scrollHeight - window.innerHeight - 10,
-        behavior: 'smooth'
-      });
-    }
-    
-  }
-  */
-  
 }
 
 function handleClick(e) {
