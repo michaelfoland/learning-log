@@ -6,18 +6,20 @@ export const buttonText = 'Settings';
 let settingsPanel;
 let settings;
 
+export function init(initialSettings) {
+  settings = initialSettings;
+  
+  db.addSettingsUpdateCallback(updateSettings);
+}
+
 export function render() {
-  return db.getSettings().then(
-    result => {
-      // cache settings
-      settings = result;
-      
-      // render template and return it to nav
-      return settingsPanelTemplate(result);
-    },
-    err => {
-      console.log('error in call to db.getSettings() from render() in settingsPanel.js');
-    });
+  return new Promise((resolve, reject) => {
+    if (settings) {
+      resolve(settingsPanelTemplate(settings));
+    } else {
+      reject('settings not defined in settingsPanel.js');
+    }
+  });
 }
 
 export function postRender() {
@@ -35,6 +37,10 @@ export function preDestroy() {
   gatherInputValues();
   // check whether any values have changed (viz see if current values are different from user values)
   
+}
+
+function updateSettings(newSettings) {
+  settings = newSettings;
 }
 
 function attachListeners() {
@@ -106,11 +112,9 @@ function save() {
   db.updateSettings(settings)
     .then(
       result => {
-        // TODO: display an overlay here on successful update
         document.getElementById('main-container').innerHTML = settingsPanelTemplate(settings);
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        console.log('after updating settings, settings now =',settings);
-        postRender(); // since we're re-rendering the entire view, we need to reattach event listeners, etc.
+          postRender(); // since we're re-rendering the entire view, we need to reattach event listeners, etc.
       },
       err => {
         console.log('error while trying to update settings');

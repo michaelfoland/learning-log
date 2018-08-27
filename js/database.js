@@ -11,7 +11,7 @@ let maxChecks = 3;
 let timeBetweenChecks = 1000;
 
 // callbacks to push settings on update
-let callbacks = [];
+let settingsUpdateCallbacks = [];
 
 function onload(err) {
   if (settings && learningLog) dbReady = true;
@@ -50,11 +50,7 @@ export function getSettings() {
 }
 
 export function updateSettings(newSettings) {
-  console.log('old newSettings =',newSettings);
-  
   sanitizeSettingsObject(newSettings);
-  
-  console.log('new newSettings =',newSettings);
   
   return new Promise((resolve, reject) => {
     settings.update({},newSettings,{multi: false, upsert: true}, (err, num, docs, upsert) => {
@@ -62,6 +58,12 @@ export function updateSettings(newSettings) {
         reject('db error: unable to update settings');
       } else {
         console.log('updated settings to',newSettings);
+        
+        settingsUpdateCallbacks.forEach(callback => {
+          console.log('calling settings update callback');
+          callback(newSettings);
+        });
+        
         resolve(docs);
       }
     });
@@ -272,6 +274,6 @@ export function add(newEntry) {
   });
 }
 
-export function addPushSettingsCallback(callback) {
-  callbacks.push(callback);  
+export function addSettingsUpdateCallback(callback) {
+  settingsUpdateCallbacks.push(callback);  
 }

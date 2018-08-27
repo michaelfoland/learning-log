@@ -38,7 +38,7 @@ function firstTimeSetup() {
   db.updateSettings(defaultSettings)
     .then(
       result => {
-        console.log('successfully, loaded settings, now calling setup()');
+        console.log('successfully loaded settings, now calling setup()');
         setup(defaultSettings);
       },      err => {
         console.log('failed to loaded settings to db');
@@ -66,6 +66,9 @@ function setup(settings) {
 
   // SET UP LOG VIEW
   logView.init(db, settings);
+  
+  // SET UP SETTINGS PANEL
+  settingsPanel.init(settings);
 
   // NAVIGATE TO LOG VIEW TO START
   myNav.navigateTo(logView.id);

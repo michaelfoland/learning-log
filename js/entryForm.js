@@ -22,6 +22,9 @@ export function init(database, theNavigator, initialSettings) {
   db = database;
   settings = initialSettings;
   navigator = theNavigator;
+  
+  db.addSettingsUpdateCallback(updateSettings);
+  
   getSourcesAndSubjects();
 }
 
@@ -90,7 +93,6 @@ function entryFeedbackTemplatePostRender() {
   });
 }
 
-
 export function updateSources(newSources) {
   // cloudItems.sources = newSources;
   
@@ -102,7 +104,7 @@ export function updateSubjects(newSubjects) {
   rowData.filter(row => row.row === 'subject')[0].promptCloudMembers = newSubjects.slice(0,settings.subjectPromptsUser);
 }
 
-export function updateSettings(newSettings) {
+function updateSettings(newSettings) {
   settings = newSettings;
 }
 

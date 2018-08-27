@@ -33,6 +33,7 @@ let windowResizeTimeout;
 export function init(database, initialSettings) {
   db = database;
   settings = initialSettings;
+  db.addSettingsUpdateCallback(updateSettings);
 }
 
 export function render() {
@@ -92,15 +93,9 @@ function attachMutationObservers() {
   let config = { characterData: false, childList: false, attributes: true, subtree: true };
   
   fixedSpacerObserver.observe(targetNode, config);
-  
-  // ATTACH OBSERVER TO 
 }
 
 function attachListeners() {
-  // FOR DEBUGGING ONLY
-  
-  
-  
   // add click handlers for .log-entry objects
   logView.addEventListener('click',handleClick,false);
 
@@ -941,4 +936,8 @@ function scrollToTop() {
 function getSubButtonFullHeight(subButton) {
   let style = window.getComputedStyle(subButton);
   return subButton.offsetHeight + parseFloat(style.marginTop) + parseFloat(style.marginBottom);
+}
+
+function updateSettings(newSettings) {
+  settings = newSettings;
 }
