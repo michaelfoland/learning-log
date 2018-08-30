@@ -33,7 +33,6 @@
 ===== LOG VIEW =====
 ================= */
 
-
 #log-view {
   /* padding-top: .8rem; */
   cursor: default;
@@ -43,35 +42,32 @@
 
 @media (max-width: 599.98px) {
   #log-view-filter {
-    padding-top: .2rem; /* moved from #log-view to prevent visibility of scrolling content */
-    width: calc(100vw - 1rem);    
-    
+    padding-top: 0.2rem; /* moved from #log-view to prevent visibility of scrolling content */
+    width: calc(100vw - 1rem);
   }
 }
 
-
 #log-view-filter {
   display: grid;
-  position: fixed; 
+  position: fixed;
   z-index: 50;
   box-sizing: border-box;
   background: #fff;
   overflow-x: hidden;
   text-align: center;
   margin: 0 auto;
-  padding-bottom: .5em;
+  padding-bottom: 0.5em;
 }
 
 @media (min-width: 600px) {
   #log-view-filter {
-    grid-template-areas: 
-      "button search"
-      "subButton subButton"
-      "message message";
-      width: calc(100vw - 2rem);
-      
+    grid-template-areas:
+      'button search'
+      'subButton subButton'
+      'message message';
+    width: calc(100vw - 2rem);
   }
-  
+
   #log-view-filter__search-sub-buttons {
     display: none;
   }
@@ -79,11 +75,11 @@
 
 @media (max-width: 599.98px) {
   #log-view-filter {
-    grid-template-areas: 
-      "search"
-      "button"
-      "subButton"
-      "message";
+    grid-template-areas:
+      'search'
+      'button'
+      'subButton'
+      'message';
   }
 }
 
@@ -104,16 +100,14 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
   }
-  
+
   #log-view-filter__search-lg {
     display: none;
   }
-  
+
   #log-view__search-button {
     display: inline-block;
   }
-  
-  
 }
 
 @media (min-width: 600px) {
@@ -121,13 +115,13 @@
     grid-area: search;
     display: flex;
     align-items: center;
-    justify-content: flex-end;    
+    justify-content: flex-end;
   }
-  
+
   #log-view-filter__button-group {
     justify-content: flex-start;
   }
-  
+
   #log-view__search-button {
     display: none;
   }
@@ -140,10 +134,9 @@
   overflow: hidden;
 }
 
-
 .fixed-container {
-  align-items: flex-start; 
-  height: 2.4rem;     
+  align-items: flex-start;
+  height: 2.4rem;
   overflow-y: hidden;
   overflow-x: hidden;
 }
@@ -162,11 +155,11 @@
 }
 
 .sub-button-group.active-group .previous-row-button {
-  display: none;  
+  display: none;
 }
 
 .sub-button-group.active-group .next-row-button {
-  display: none;  
+  display: none;
 }
 
 .sub-button-group__button-container {
@@ -174,8 +167,8 @@
   flex-grow: 1;
   flex-wrap: wrap;
   flex-direction: row;
-  justify-content: flex-start; 
-  align-items: center; 
+  justify-content: flex-start;
+  align-items: center;
   transition: margin 300ms linear;
   box-sizing: border-box;
   max-width: calc(100% - 70px);
@@ -183,16 +176,15 @@
   /*border: solid 2px black; */
 }
 
-
 .sub-button {
-  font-size: .9rem;
+  font-size: 0.9rem;
   line-height: 1rem;
-  padding: .3rem .3rem;
-  margin: .4rem .2rem;
+  padding: 0.3rem 0.3rem;
+  margin: 0.4rem 0.2rem;
   border: solid 1px;
-  border-radius: .8em;
+  border-radius: 0.8em;
   transition: all 200ms linear;
-  
+
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -209,12 +201,6 @@
 }
 
 #log-view-filter__date-sub-buttons {
-  /*
-  box-sizing: border-box;
-  border: solid 1px green;
-  display: flex;
-  */
-  /* flex: 1 1 auto; */
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -222,21 +208,24 @@
 
 .log-view__button {
   font-size: 1rem;
-  margin: 0 .1em;
-  border-radius: .2em;
+  margin: 0 0.1em;
+  border-radius: 0.2em;
   transition: all 150ms linear;
+  line-height: 1.2;
+
 }
 
 
 @media (min-width: 600px) {
   .log-view__button {
-    padding: .1em .3em;    
-  }  
+    padding: 0.3em;
+  }
 }
 
 @media (max-width: 599.98px) {
   .log-view__button {
-    padding: .4em 0;
+    padding: 0.3em 0;
+    font-size: 1.2rem;
   }
 }
 
@@ -244,52 +233,67 @@
   /* flex-grow: 1; */
   display: flex;
   justify-content: space-around;
-  flex-wrap: nowrap; 
+  flex-wrap: nowrap;
   /* border: solid 1px yellow; */
 }
 
-#log-view__date-button, #log-view-filter__date-sub-buttons .sub-button {
+#log-view__date-button,
+#log-view-filter__date-sub-buttons .sub-button {
   color: var(--color-0);
   border: solid 1px var(--color-0);
 }
 
-#log-view__date-button:hover,#log-view-filter__date-sub-buttons .sub-button:hover, #log-view__date-button.active-button, #log-view-filter__date-sub-buttons .sub-button.active-button {
+#log-view__date-button:hover,
+#log-view-filter__date-sub-buttons .sub-button:hover,
+#log-view__date-button.active-button,
+#log-view-filter__date-sub-buttons .sub-button.active-button {
   background: var(--color-0);
   color: #eee;
 }
 
-#log-view__subject-button, #log-view-filter__subject-sub-buttons .sub-button {
+#log-view__subject-button,
+#log-view-filter__subject-sub-buttons .sub-button {
   color: var(--color-1);
   border: solid 1px var(--color-1);
 }
 
-#log-view__subject-button:hover, #log-view-filter__subject-sub-buttons .sub-button:hover, #log-view__subject-button.active-button, #log-view-filter__subject-sub-buttons .sub-button.active-button  {
+#log-view__subject-button:hover,
+#log-view-filter__subject-sub-buttons .sub-button:hover,
+#log-view__subject-button.active-button,
+#log-view-filter__subject-sub-buttons .sub-button.active-button {
   background: var(--color-1);
   color: #eee;
 }
 
-#log-view__source-button, #log-view-filter__source-sub-buttons  .sub-button {
+#log-view__source-button,
+#log-view-filter__source-sub-buttons .sub-button {
   color: var(--color-3);
   border: solid 1px var(--color-3);
 }
 
-#log-view__source-button:hover, #log-view-filter__source-sub-buttons .sub-button:hover, #log-view__source-button.active-button, #log-view-filter__source-sub-buttons .sub-button.active-button {
+#log-view__source-button:hover,
+#log-view-filter__source-sub-buttons .sub-button:hover,
+#log-view__source-button.active-button,
+#log-view-filter__source-sub-buttons .sub-button.active-button {
   background: var(--color-3);
   color: #eee;
 }
 
-#log-view__search-button, #log-view-filter__search-sub-buttons .sub-button {
+#log-view__search-button,
+#log-view-filter__search-sub-buttons .sub-button {
   color: var(--color-2);
   border: solid 1px var(--color-2);
 }
 
-#log-view__search-button:hover, #log-view-filter__search-sub-buttons .sub-button:hover, #log-view__search-button.active-button {
+#log-view__search-button:hover,
+#log-view-filter__search-sub-buttons .sub-button:hover,
+#log-view__search-button.active-button {
   background: var(--color-2);
   color: #eee;
 }
 
 #log-view-filter__search-sub-buttons {
-  padding-top: .4rem;
+  padding-top: 0.4rem;
 }
 
 #log-view-filter__search-sub-buttons > .sub-button {
@@ -299,11 +303,11 @@
 
 .log-view-filter__search-input {
   font-size: 1rem;
-  padding: .1em .3em;
-  border-radius: .2em;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
   color: var(--color-2);
   border: solid 1px #888;
-  margin-right: .5em;
+  margin-right: 0.5em;
   flex-shrink: 1;
   flex-grow: 1;
   cursor: text;
@@ -315,11 +319,10 @@
   }
 }
 
-
 #log-view__search-submit-button {
   font-size: 1rem;
-  padding: .1em .3em;
-  border-radius: .2em;
+  padding: 0.1em 0.3em;
+  border-radius: 0.2em;
   background-color: var(--color-2);
   color: #eee;
   flex-grow: 0;
@@ -332,53 +335,44 @@
 @media (min-width: 900px) {
   #log-view-display {
     width: 85%;
-  }  
+  }
 }
 
 @media (min-width: 600px) and (max-width: 899.98px) {
   #log-view-display {
     width: 92.5%;
-  }  
+  }
 }
 
 @media (max-width: 599.98px) {
   #log-view-display {
     width: 100%;
-  }  
+  }
 }
 
 .date-block-heading {
   color: #888;
-  margin: .5em 0;
+  margin: 0.5em 0;
   font-size: 1.4rem;
 }
 
 .log-entry {
   margin: 0em 1em;
-  padding: .5em;
+  padding: 0.5em;
   border-left: solid 2px white; /* color added on hover & .log-entry__selected */
-  transition: 
-    padding 150ms ease-out,
-    margin 150ms ease-out,
-    transform 150ms ease-out,
-    background 150ms linear,
-    border 150ms linear;
+  transition: padding 150ms ease-out, margin 150ms ease-out, transform 150ms ease-out,
+    background 150ms linear, border 150ms linear;
 }
 
 /* is the transition rule needed */
 .log-entry.log-entry__selected {
   border-left-color: var(--color-2);
-  padding: 1.5em .5em;
+  padding: 1.5em 0.5em;
   margin: 1em 1em;
   transform: scale(1.05);
   box-shadow: 1px 0px 3px 1px #ccc;
-  transition:
-    padding 150ms ease-out,
-    margin 150ms ease-out,
-    transform 150ms ease-out,
-    background 150ms linear, 
-    border 150ms linear,
-    box-shadow 150ms linear; 
+  transition: padding 150ms ease-out, margin 150ms ease-out, transform 150ms ease-out,
+    background 150ms linear, border 150ms linear, box-shadow 150ms linear;
 }
 
 /* OR maybe use a NOT operator? 
@@ -387,19 +381,18 @@ not sure how that works in css */
   background: none;
 }
 
-
 .log-entry__other {
   display: none;
   margin-left: 1em; /* may need to adjust this at smaller screen sizes */
 }
 
-.log-entry__source, 
+.log-entry__source,
 .log-entry__subject {
   display: none;
   overflow-wrap: break-word;
   font-size: 1rem;
-  margin: 0 .2em;
-  padding: 0em .3em;
+  margin: 0 0.2em;
+  padding: 0em 0.3em;
   max-width: 70vw;
   box-sizing: border-box;
 }
@@ -421,7 +414,7 @@ not sure how that works in css */
 .log-entry__title {
   color: var(--color-2);
   font-size: 1.2rem;
-  margin-bottom: .3em;
+  margin-bottom: 0.3em;
 }
 
 .log-entry__source {
@@ -433,7 +426,7 @@ not sure how that works in css */
 .log-entry__source:hover {
   color: #eee;
   background: var(--color-3);
-  box-shadow: 0px 0px .1em .1em var(--color-3);
+  box-shadow: 0px 0px 0.1em 0.1em var(--color-3);
 }
 
 .log-entry__subject {
@@ -445,7 +438,7 @@ not sure how that works in css */
 .log-entry__subject:hover {
   color: #eee;
   background: var(--color-1);
-  box-shadow: 0px 0px .1em .1em var(--color-1);
+  box-shadow: 0px 0px 0.1em 0.1em var(--color-1);
 }
 
 .flex-spacer {
@@ -465,23 +458,23 @@ not sure how that works in css */
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  margin-bottom: .3em;
+  margin-bottom: 0.3em;
   /* border: solid 1px blue; */
 }
 
 @media (max-width: 599.98px) {
   .log-entry__metadata {
-    margin-top: .5em;
+    margin-top: 0.5em;
     /* border: solid 1px purple; */
   }
 }
 
 #log-view-filter__message {
-  margin: .5em .2em;
+  margin: 0.5em 0.2em;
   font-size: 1rem;
   grid-area: message;
   display: none;
-  width: 90vw; 
+  width: 90vw;
   /*
   justify-content: center;
   flex-wrap: wrap;
@@ -502,7 +495,7 @@ not sure how that works in css */
 #log-view-filter__message-text.subject {
   color: var(--color-1);
 }
-  
+
 #log-view-filter__message-text.source {
   color: var(--color-3);
 }
@@ -511,16 +504,16 @@ not sure how that works in css */
   color: var(--color-2);
 }
 
-#log-view-filter__message-text.date-range, 
+#log-view-filter__message-text.date-range,
 #log-view-filter__message-text.date-keyword {
   color: var(--color-0);
 }
 
 #log-view-filter__message-button {
-  margin: 0 .5rem;
+  margin: 0 0.5rem;
   display: inline;
   color: var(--color-0);
-  font-size: .8rem;
+  font-size: 0.8rem;
   border-radius: 1em;
   transition: all 150ms linear;
 }
@@ -539,13 +532,12 @@ not sure how that works in css */
 #custom-date-filter-button.highlight {
   color: #eee;
   background: var(--color-0);
-  
 }
 
 .sub-button-nav {
   font-size: 1rem;
-  padding: .1em;
-  margin: .2em;
+  padding: 0.1em;
+  margin: 0.2em;
   transition: all 100ms linear;
 }
 
@@ -564,23 +556,21 @@ not sure how that works in css */
   justify-content: center;
   align-items: flex-start;
   width: 60px;
-
 }
 
 .date-filter-input {
-  border-radius: .3em;
-  padding: .1em;
-  margin: 0 .3em;
+  border-radius: 0.3em;
+  padding: 0.1em;
+  margin: 0 0.3em;
   border: solid 1px gray;
   color: gray;
   /* width: 8em; */
   max-width: 10em;
   flex-grow: 1;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
 .date-filter-input.future-date {
-  
 }
 
 span.future-date {
@@ -588,10 +578,10 @@ span.future-date {
 }
 
 span.future-date::before {
-  content: "Date must not be in the future!";
+  content: 'Date must not be in the future!';
   position: absolute;
   display: block;
-  font-size: .8em;
+  font-size: 0.8em;
   color: #a55;
   top: -1em;
   background: #fff;
@@ -603,10 +593,10 @@ span.future-date::before {
   z-index: 1000;
   background: #fcfcfc;
   box-shadow: 1px 1px 1px 2px #bbb;
-  font-size: .75rem;
+  font-size: 0.75rem;
   color: #a11;
-  padding: .1rem .3rem;
-  border-radius: .3rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.3rem;
   transition: opacity 300ms linear;
 }
 
@@ -615,11 +605,11 @@ span.future-date::before {
 }
 
 #log-view-filter__subject-sub-buttons polyline {
-  stroke: var(--color-1); 
+  stroke: var(--color-1);
 }
 
 #log-view-filter__source-sub-buttons polyline {
-  stroke: var(--color-3); 
+  stroke: var(--color-3);
 }
 
 .log-view-more__container {
@@ -634,22 +624,21 @@ span.future-date::before {
 
 .log-view-more__button {
   font-size: 1.4rem;
-  padding: .1em .5em;
+  padding: 0.1em 0.5em;
   border-radius: 1em;
-  margin: 0 .25em;
+  margin: 0 0.25em;
 
   color: white;
   background-color: var(--color-1);
   transition: all 150ms linear;
-
 }
 
 .log-view-more__button:hover {
-  box-shadow: 0 0 .3em .1em var(--color-1);
+  box-shadow: 0 0 0.3em 0.1em var(--color-1);
 }
 
 .date-keyword-button {
-  font-size: .85rem;
+  font-size: 0.85rem;
 }
 
 .log-view__welcome {

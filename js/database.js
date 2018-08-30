@@ -57,7 +57,8 @@ export function updateSettings(newSettings) {
       if (err) {
         reject('db error: unable to update settings');
       } else {
-        settingsUpdateCallbacks.forEach(callback => {
+        settingsUpdateCallbacks.forEach((callback, index) => {
+          console.log('=== database.updateSettings; calling callback #', index + 1);
           callback(newSettings);
         });
 
