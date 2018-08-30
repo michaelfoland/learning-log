@@ -25,9 +25,7 @@ button {
 ===== CSS CUSTOM PROPS =====
 ========================= */
 :root {
-  --base-font: 'Segoe UI Light', Tahoma, Geneva, sans-serif;
-  --base-color: #68a;
-
+  --base-font: 'Segoe UI Light', TrebuchetMS, Verdana, sans-serif;
   --color-0-light: #999;
   --color-0: #666;
   --color-0-dark: #333;
