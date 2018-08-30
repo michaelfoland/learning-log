@@ -672,7 +672,7 @@ function toggleSubButtonRow(e) {
     e.target.classList.add('active-button');
   }
 
-  let targetIsVisible = Array.from(targetSubButtonRow.classList).includes('active-group');
+  let targetIsVisible = targetSubButtonRow.classList.contains('active-group');
 
   if (targetIsVisible) {
     // Hide row
@@ -719,7 +719,11 @@ function toggleSubButtonRow(e) {
       let slidingContainer = targetSubButtonRow.querySelector(
         '.sub-button-group__button-container'
       );
-      subButtonAnchor = slidingContainer.firstElementChild.dataset.target;
+
+      // set sub button anchor, IF there are any children (i.e., any sub buttons)
+      if (slidingContainer.firstElementChild) {
+        subButtonAnchor = slidingContainer.firstElementChild.dataset.target;
+      }
     }
   }
 }
@@ -865,9 +869,13 @@ function updateSubButtonNav(buttonGroup) {
   let upButton = buttonGroup.querySelector('.previous-row-button');
   let downButton = buttonGroup.querySelector('.next-row-button');
 
-  upButton.style.display = Math.abs(targetRect.top - parentRect.top) < 5 ? 'none' : 'inline-block';
-  downButton.style.display =
-    Math.abs(targetRect.bottom - parentRect.bottom) < 5 ? 'none' : 'inline-block';
+  console.log({ targetRect });
+  console.log({ parentRect });
+  console.log('targetRect.top - parentRect.top =', targetRect.top - parentRect.top);
+  console.log('targetRect.bottom - parentRect.bottom', targetRect.bottom - parentRect.bottom);
+
+  upButton.style.display = targetRect.top - parentRect.top < 5 ? 'none' : 'inline-block';
+  downButton.style.display = targetRect.bottom - parentRect.bottom < 5 ? 'none' : 'inline-block';
 }
 
 function chunkEntries(entries) {

@@ -531,8 +531,21 @@ span.future-date::before {
   stroke: var(--color-1);
 }
 
+#log-view-filter__subject-sub-buttons .sub-button-row__empty-message {
+  color: var(--color-1);
+}
+
 #log-view-filter__source-sub-buttons polyline {
   stroke: var(--color-3);
+}
+
+#log-view-filter__source-sub-buttons .sub-button-row__empty-message {
+  color: var(--color-3);
+}
+
+.sub-button-row__empty-message {
+  display: inline-block;
+  margin-top: .5em;
 }
 
 .log-view-more__container {

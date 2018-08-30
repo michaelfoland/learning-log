@@ -58,7 +58,6 @@ export function updateSettings(newSettings) {
         reject('db error: unable to update settings');
       } else {
         settingsUpdateCallbacks.forEach((callback, index) => {
-          console.log('=== database.updateSettings; calling callback #', index + 1);
           callback(newSettings);
         });
 
@@ -132,24 +131,6 @@ export function getAll(prop) {
   });
 }
 
-export function logDbContents() {
-  learningLog.find({}, (err, docs) => {
-    if (err) {
-      console.log(err);
-    } else {
-      docs.forEach((doc, index) => {
-        console.log('doc ', index + 1, ':');
-
-        for (let key in doc) {
-          if (doc.hasOwnProperty(key)) {
-            console.log('\t' + key + ':\t' + doc[key]);
-          }
-        }
-      });
-    }
-  });
-}
-
 export function getBySearchString(searchString) {
   // split string and make sure there are no empty strings
   let terms = searchString.split(' ');
@@ -216,7 +197,6 @@ export function getAllEntries() {
 }
 
 export function getEntries(query) {
-  console.log('=== database getEntries()');
   return new Promise((resolve, reject) => {
     learningLog
       .find(query)

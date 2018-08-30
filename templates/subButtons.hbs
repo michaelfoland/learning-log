@@ -2,12 +2,13 @@
 <div class="sub-button-group__button-container">
   {{#each this}}
     <button data-target="{{this}}" class="sub-button">{{this}}</button>
+  {{else}}
+    <span class="sub-button-row__empty-message">There are no log entries yet.  Please add some!</span>
   {{/each}}
 </div>
 
 {{!-- This needs to be visible on the top row no matter what --}}
 <div class="sub-button-nav-button-container">
-  <!-- replace these buttons with proper svg icons at some point -->
   <button type="button" role="button" class="previous-row-button sub-button-nav" data-nav-direction="backward" >
     <svg width="20" height="12">
       <polyline points="2 10, 10 3, 18 10" fill="transparent" stroke-width="3" />
