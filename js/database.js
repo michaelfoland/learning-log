@@ -153,7 +153,6 @@ export function logDbContents() {
 export function getBySearchString(searchString) {
   // split string and make sure there are no empty strings
   let terms = searchString.split(' ');
-
   terms = terms.filter(term => term.trim() !== '').map(term => '\\b' + term + '\\b'); // Need to escape \b, otherwise javascript understands it as \u0008
 
   // create queries from search terms
@@ -164,7 +163,6 @@ export function getBySearchString(searchString) {
     queries.push({ details: RegExp(term, 'i') });
   });
 
-  // execute queries on db
   return new Promise((resolve, reject) => {
     getEntries({ $or: queries }).then(result => resolve(result), err => reject(err));
   });
@@ -183,7 +181,7 @@ export function getByFrequency(prop) {
         reject("error in finding the property '" + prop + "'in learningLog");
       }
 
-      // Calculate how many of each prop there all
+      // Calculate how many of each prop there are
       let counts = {};
 
       docs.forEach(doc => {

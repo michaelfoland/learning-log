@@ -31,13 +31,6 @@ export function postRender() {
   refreshSwatches();
 }
 
-export function preDestroy() {
-  console.log('in settingsPanel.destroy()');
-
-  gatherInputValues();
-  // check whether any values have changed (viz see if current values are different from user values)
-}
-
 function updateSettings(newSettings) {
   settings = newSettings;
 }
@@ -88,8 +81,6 @@ function handleClick(e) {
 }
 
 function save() {
-  console.log('=== in save() ===');
-
   let inputEls = Array.from(settingsPanel.querySelectorAll('[data-prop-name]'));
 
   let updated = false;
@@ -213,9 +204,7 @@ function hideOverlay() {
 }
 
 function getScrollTop() {
-  let scrollTop = Math.floor(document.documentElement.scrollTop || document.body.scrollTop);
-  console.log({ scrollTop });
-  return scrollTop;
+  return Math.floor(document.documentElement.scrollTop || document.body.scrollTop);
 }
 
 function getFixedPositionSpacerHeight() {

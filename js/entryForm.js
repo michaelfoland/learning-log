@@ -24,7 +24,6 @@ export function init(database, theNavigator, initialSettings) {
 }
 
 export function render() {
-  console.log('ENTRY-FORM: calling getSourcesAndSubjects()');
   return getSourcesAndSubjects().then(
     result => entryFormTemplate({ rows: rowData }),
     error => entryFormTemplate({ rows: rowData })
@@ -45,14 +44,14 @@ function getSourcesAndSubjects() {
       updateSources(result.sources);
       updateSubjects(result.subjects);
     },
-    err => console.log('problem in bundlePromises()')
+    err => console.log('=== entryForm.getSourcesAndSubjects(): error')
   );
 }
 
 function addItemToDb(obj) {
   db.add(obj)
     .then(
-      result => console.log('ENTRY FORM: got result from promise'),
+      result => result,
       error => {
         // TODO: Actually implement a feedback template in case of db error
         console.log('ENTRY FORM: got error from promise');
@@ -150,8 +149,6 @@ function handleFocus(e) {
 }
 
 function handleClick(e) {
-  console.log('handleClick');
-
   if (e.target.matches('.locked-input-button')) {
     unlockInput(e);
   } else if (e.target.matches('.cloud-item')) {
@@ -164,7 +161,6 @@ function handleClick(e) {
 }
 
 function fillInputAndLock(e) {
-  console.log('=== fillInputAndLock()');
   var parentCloud = e.target.dataset.parentCloud;
   var input = document.getElementById(parentCloud + '-input');
   input.value = e.target.textContent;
@@ -303,8 +299,6 @@ function lockInput(e) {
 }
 
 function checkForm(e) {
-  console.log('=== checkForm()');
-
   // Get all inputs
   var inputs = Array.from(document.getElementsByClassName('unlocked-input-value'));
 
@@ -321,7 +315,6 @@ function checkForm(e) {
   });
 
   if (rowsInError.length > 0) {
-    console.log('\tthere are some errors');
     rowsInError.forEach(function(row) {
       document.getElementById(row + '-input').classList.add('error');
       scrollToTop();
@@ -336,8 +329,6 @@ function checkForm(e) {
         newLogData[propName] = input.value;
       }
     });
-
-    console.log('newLogData =', newLogData);
 
     // update view to show that submission is taking place
     // add overlay with centered div
@@ -407,14 +398,11 @@ function getDateString(date) {
 }
 
 function initializeDate() {
-  console.log('== entry-form initializeDate()');
   document.getElementById('date-entry').textContent = getDateString(new Date());
   document.getElementById('date-input').valueAsDate = new Date(Date.now());
 }
 
 function populateCloud(type) {
-  console.log('=== populateCloud()');
-
   if (!cloudItems[type]) return;
 
   var parent = document.getElementById('entry-form').querySelector('#' + type + '-cloud');
@@ -440,9 +428,7 @@ function scrollToTop() {
 }
 
 function getScrollTop() {
-  let scrollTop = Math.floor(document.documentElement.scrollTop || document.body.scrollTop);
-  console.log({ scrollTop });
-  return scrollTop;
+  return Math.floor(document.documentElement.scrollTop || document.body.scrollTop);
 }
 
 function getFixedPositionSpacerHeight() {

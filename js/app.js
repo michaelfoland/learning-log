@@ -1,12 +1,12 @@
 // imports
-import * as db from "./database";
-import { bundlePromises } from "./promiseHelpers";
-import { Navigator } from "./navigator";
-import { insertSpacers } from "./fixed-spacer";
-import * as entryForm from "./entryForm";
-import * as logView from "./logView";
-import * as settingsPanel from "./settingsPanel";
-import { defaultSettings } from "./settings";
+import * as db from './database';
+import { bundlePromises } from './promiseHelpers';
+import { Navigator } from './navigator';
+import { insertSpacers } from './fixed-spacer';
+import * as entryForm from './entryForm';
+import * as logView from './logView';
+import * as settingsPanel from './settingsPanel';
+import { defaultSettings } from './settings';
 
 // init db
 db.isReady().then(
@@ -15,7 +15,7 @@ db.isReady().then(
   },
   err => {
     // TO DO: display some sort of reload/retry message in main container
-    console.log("\tonFailure callback of db.isReady() in app.js");
+    console.log('\tonFailure callback of db.isReady() in app.js');
   }
 );
 
@@ -23,15 +23,14 @@ let myNav;
 
 // called after db is good to go
 function setup(settings) {
-  // set up css variables
   setupCssVariables(settings);
 
-  myNav = new Navigator([logView, entryForm, settingsPanel], "main-container");
-  document.getElementById("nav-container").innerHTML = myNav.render();
+  // set up nav and insert spacer underneath
+  myNav = new Navigator([logView, entryForm, settingsPanel], 'main-container');
+  document.getElementById('nav-container').innerHTML = myNav.render();
   myNav.postRender();
 
-  // insert a spacer 'under' the fixed-position nav-container element
-  insertSpacers("#nav-container");
+  insertSpacers('#nav-container');
 
   // SET UP ENTRY FORM
   entryForm.init(db, myNav, settings);
@@ -55,7 +54,7 @@ function checkSettings() {
         firstTimeSetup();
       }
     },
-    err => console.log("error in checkSettings of app.js")
+    err => console.log('error in checkSettings of app.js')
   );
 }
 
@@ -65,34 +64,34 @@ function firstTimeSetup() {
       setup(defaultSettings);
     },
     err => {
-      console.log("failed to pass settings to db");
+      console.log('failed to pass settings to db');
     }
   );
 }
- 
+
 function setupCssVariables(settings) {
   document.documentElement.style.setProperty(
-    "--color-1",
-    "hsl(" + settings.color0User + ", 50%, 50%)"
+    '--color-1',
+    'hsl(' + settings.color0User + ', 50%, 50%)'
   );
   document.documentElement.style.setProperty(
-    "--color-1-dark",
-    "hsl(" + settings.color0User + ", 65%, 35%)"
+    '--color-1-dark',
+    'hsl(' + settings.color0User + ', 65%, 35%)'
   );
   document.documentElement.style.setProperty(
-    "--color-2",
-    "hsl(" + settings.color1User + ", 50%, 50%)"
+    '--color-2',
+    'hsl(' + settings.color1User + ', 50%, 50%)'
   );
   document.documentElement.style.setProperty(
-    "--color-2-dark",
-    "hsl(" + settings.color1User + ", 65%, 35%)"
+    '--color-2-dark',
+    'hsl(' + settings.color1User + ', 65%, 35%)'
   );
   document.documentElement.style.setProperty(
-    "--color-3",
-    "hsl(" + settings.color2User + ", 50%, 50%)"
+    '--color-3',
+    'hsl(' + settings.color2User + ', 50%, 50%)'
   );
   document.documentElement.style.setProperty(
-    "--color-3-dark",
-    "hsl(" + settings.color2User + ", 65%, 35%)"
+    '--color-3-dark',
+    'hsl(' + settings.color2User + ', 65%, 35%)'
   );
 }
