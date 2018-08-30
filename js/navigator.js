@@ -49,31 +49,16 @@ export class Navigator {
   }
 
   navigateTo(newViewId) {
-    // console.log('in navigateTo(), this._currentlyVisibleId =',this._currentlyVisibleId);
-    
     // Get target and check that it exists
     let target = this._navTargets.filter(navTarget => {
       return navTarget.id === newViewId;
     })[0];
 
     if (!target) return; // bail if no target was found
-
-    /*
-    // NEW 8/22: run preDestroy on currently visible target
-    let currentView = this._navTargets.filter((curr,prev) => {
-      return curr.id = this._currentlyVisibleId;
-    });
-    
-    if (currentView.length > 0) {
-      console.log('about to call preDestroy()');
-      currentView[0].preDestroy();
-    }
-    */
         
     this._currentNavTarget = target;
 
     // Fetch new view
-    // console.log('DEBUG 1: navigator.js calling fetchNewView()');
     this.fetchNewView();
         
     // Update active class on nav buttons
@@ -92,51 +77,21 @@ export class Navigator {
     }
   }
   
-  
-  /*
-  navigateTo(newViewId) {
-    // Get target and check that it exists
-    let target = this._navTargets.filter(navTarget => {
-      return navTarget.id === newViewId;
-    })[0];
-
-    if (!target) return; // bail if no target was found
-    
-    if (this._currentlyVisibleId !== '') {
-      document.getElementById(this._currentlyVisibleId + '-button').classList.remove(activeClass);  
-    }
-
-    document.getElementById(newViewId + '-button').classList.add(activeClass);
-
-    this._currentNavTarget = target;
-
-    let container = document.getElementById(this._containerId);
-    container.classList.add('fading-out');
-    
-    let overlay = document.getElementById('overlay');
-    
-    if (overlay.style.display === 'flex') {
-      overlay.classList.add('fading-out');
-    }
-  }
-  */
-  
   fetchNewView() {
     this._currentNavTarget.render()
       .then(
         result => {
           this._renderedNavTarget = result;
-          // console.log('in fetchNewView: SUCCESS. Setting renderedNavTarget to',result.substring(0,500));
         },
         error => {
           this._renderedNavTarget = 'error loading ' + this._currentNavTarget.id; 
-          // console.log('in fetchNewView: ERROR. Setting renderedNavTarget to',error);
         }
       );
   }
   
   changeViews() {
-    // hide overlay: NOT SURE THESE LINES SHOULD BE HERE
+// hide overlay: NOT SURE THESE LINES SHOULD BE HERE
+
     let overlay = document.getElementById('overlay');
     overlay.style.display = 'none';
     overlay.style.opacity = 1;

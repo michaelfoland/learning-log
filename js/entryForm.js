@@ -3,16 +3,11 @@ import newEntryFeedbackTemplate from '../templates/newEntryFeedback.hbs';
 import { rowData } from './entryFormRowData.js';
 import { bundlePromises } from './promiseHelpers';
 
-// App.js will provide this
-// let dbCallback = null;
-let settings;  
+let settings;
 let navigator;
 let db;
 
-// NOTE: Someday this could probably be replaced by
-// something generated directly from rowData, so that
-// it can be modified more easily
-let entryFormFocusOrder = ['date','source','subject','title','details']
+let entryFormFocusOrder = ['date', 'source', 'subject', 'title', 'details'];
 
 // EXPORTED FUNCTIONS/VARS
 export const id = 'entry-form';
@@ -22,19 +17,18 @@ export function init(database, theNavigator, initialSettings) {
   db = database;
   settings = initialSettings;
   navigator = theNavigator;
-  
+
   db.addSettingsUpdateCallback(updateSettings);
-  
+
   getSourcesAndSubjects();
 }
 
 export function render() {
   console.log('ENTRY-FORM: calling getSourcesAndSubjects()');
-  return getSourcesAndSubjects()
-    .then(
-      result => entryFormTemplate({rows: rowData}),
-      error => entryFormTemplate({rows: rowData})
-    );
+  return getSourcesAndSubjects().then(
+    result => entryFormTemplate({ rows: rowData }),
+    error => entryFormTemplate({ rows: rowData })
+  );
 }
 
 export function postRender() {
@@ -46,38 +40,29 @@ export function postRender() {
 
 function getSourcesAndSubjects() {
   // Get sources and subjects from db
-  return bundlePromises([db.getAll('source'),db.getAll('subject')], ['sources','subjects'])
-  .then(
+  return bundlePromises([db.getAll('source'), db.getAll('subject')], ['sources', 'subjects']).then(
     result => {
-      console.log('entryForm.getSourcesAndSubjects()');
-      console.log('sources =',result.sources);
-      console.log('subjects =',result.subjects);
-      
       updateSources(result.sources);
       updateSubjects(result.subjects);
     },
     err => console.log('problem in bundlePromises()')
   );
-
 }
 
 function addItemToDb(obj) {
-  console.log('=== entry-form: adding item to db');
-  
-  console.log(obj);
-  
-  
   db.add(obj)
     .then(
       result => console.log('ENTRY FORM: got result from promise'),
-      error => console.log('ENTRY FORM: got error from promise')
+      error => {
+        // TODO: Actually implement a feedback template in case of db error
+        console.log('ENTRY FORM: got error from promise');
+      }
     )
     .finally(() => {
+      // Create and insert feedback template
       let t = newEntryFeedbackTemplate({});
-
-      // Put rendered template into document
       document.getElementById('overlay-content-panel').innerHTML = t;
-    
+
       entryFeedbackTemplatePostRender();
     });
 }
@@ -85,39 +70,39 @@ function addItemToDb(obj) {
 function entryFeedbackTemplatePostRender() {
   document.getElementById('new-entry-feedback').addEventListener('click', function(e) {
     if (e.target.dataset.navTarget === 'log-view') {
-      // document.getElementById('overlay').style.display = 'none';
       navigator.navigateTo('log-view');
     } else if (e.target.dataset.navTarget === 'entry-form') {
-      document.getElementById('overlay').style.display = 'none'; // necessary?
       navigator.navigateTo('entry-form'); // renavigating allows us to immediately get the new
-                                          // sources and subjects into the clouds
+      // sources and subjects into the prompt clouds
     }
   });
-  
+
   document.getElementById('new-entry-feedback__entry-form-button').addEventListener('blur', () => {
-    document.getElementById('new-entry-feedback__log-view-button').focus();  
+    document.getElementById('new-entry-feedback__log-view-button').focus();
   });
-  
+
   // move focus to entry feedback template
   document.getElementById('new-entry-feedback__log-view-button').focus();
 }
 
 export function updateSources(newSources) {
-  // cloudItems.sources = newSources;
-  
-  rowData.filter(row => row.row === 'source')[0].promptCloudMembers = newSources.slice(0,settings.sourcePromptsUser);
+  rowData.filter(row => row.row === 'source')[0].promptCloudMembers = newSources.slice(
+    0,
+    settings.sourcePromptsUser
+  );
 }
 
 export function updateSubjects(newSubjects) {
-  // cloudItems.subjects = newSubjects;
-  rowData.filter(row => row.row === 'subject')[0].promptCloudMembers = newSubjects.slice(0,settings.subjectPromptsUser);
-}
-
-function updateSettings(newSettings) {
-  settings = newSettings;
+  rowData.filter(row => row.row === 'subject')[0].promptCloudMembers = newSubjects.slice(
+    0,
+    settings.subjectPromptsUser
+  );
 }
 
 // END EXPORTED FUNCTIONS
+function updateSettings(newSettings) {
+  settings = newSettings;
+}
 
 function attachListeners() {
   document.getElementById('entry-form').addEventListener('click', handleClick, false);
@@ -129,13 +114,19 @@ function attachListeners() {
 
 function initializeInputFields() {
   document.getElementById('source-input').maxLength = settings.sourceLengthUser;
-  document.getElementById('source-input-chars').textContent = document.getElementById('source-input').textLength;
+  document.getElementById('source-input-chars').textContent = document.getElementById(
+    'source-input'
+  ).value.length;
   document.getElementById('source-input-max-chars').textContent = settings.sourceLengthUser;
   document.getElementById('subject-input').maxLength = settings.subjectLengthUser;
-  document.getElementById('subject-input-chars').textContent = document.getElementById('subject-input').textLength;
+  document.getElementById('subject-input-chars').textContent = document.getElementById(
+    'subject-input'
+  ).value.length;
   document.getElementById('subject-input-max-chars').textContent = settings.subjectLengthUser;
   document.getElementById('title-input').maxLength = settings.titleLengthUser;
-  document.getElementById('title-input-chars').textContent = document.getElementById('title-input').textLength;
+  document.getElementById('title-input-chars').textContent = document.getElementById(
+    'title-input'
+  ).value.length;
   document.getElementById('title-input-max-chars').textContent = settings.titleLengthUser;
 }
 
@@ -143,14 +134,14 @@ function handleFocus(e) {
   if (e.target.matches('.unlocked-input-value')) {
     removeError(e);
   }
-  
+
   let row;
-  
+
   if (e.target.closest('.entry-form__row')) {
     row = e.target.closest('.entry-form__row');
-    
+
     e.preventDefault();
-    
+
     window.scrollTo({
       top: getScrollTop() + row.getBoundingClientRect().top - getFixedPositionSpacerHeight(),
       behavior: 'smooth'
@@ -160,7 +151,7 @@ function handleFocus(e) {
 
 function handleClick(e) {
   console.log('handleClick');
-  
+
   if (e.target.matches('.locked-input-button')) {
     unlockInput(e);
   } else if (e.target.matches('.cloud-item')) {
@@ -179,7 +170,7 @@ function fillInputAndLock(e) {
   input.value = e.target.textContent;
 
   updateInputChars(input);
-  
+
   document.getElementById(parentCloud + '-entry').textContent = e.target.textContent;
 
   e.target.parentElement.parentElement.classList.add('hidden');
@@ -192,14 +183,11 @@ function fillInputAndLock(e) {
 
 function handleBlur(e) {
   if (e.relatedTarget == null) return; // when tag cloud button is clicked
-  
+
   if (e.target.matches('.unlocked-input-value')) {
-  
     // Special code for handling date
     if (e.target.id === 'date-input') {
-
       if (e.originalTarget.getAttribute('aria-label') === 'Year') {
-
         // Replace year value of date-input with rawValue from explicit original target
         var newDate = e.originalTarget.getAttribute('rawvalue') + e.target.value.substring(4);
 
@@ -212,97 +200,82 @@ function handleBlur(e) {
       e.preventDefault();
       lockInput(e);
     }
-    
   }
 }
 
 function checkForTab(e) {
-  // console.log('=== checkForTab()');
-  
   if (e.key !== 'Tab') return; // bail if key wasn't tab
-  
-  // console.log('\tdidn\'t bail');
-  
+
   // Special code for handling date
   if (e.target.id === 'date-input') {
-    // console.log('\ttarget id is date-input');
-    
     if (e.originalTarget.getAttribute('aria-label') === 'Year') {
-      // console.log('\t\te.originalTarget.getAttribute === \'year\'');
-      
       // Replace year value of date-input with rawValue from explicit original target
       var newDate = e.originalTarget.getAttribute('rawvalue') + e.target.value.substring(4);
-      // console.log('e.target =',e.target);
-      // console.log('e.originalTarget =',e.originalTarget);
-      
+
       e.target.value = newDate;
-      
+
       e.preventDefault();
       lockInput(e);
     }
   } else if (e.target.value.trim() !== '') {
     e.preventDefault();
-    // event.stopPropagation();
     lockInput(e);
   }
 }
 
 function handleInputAndChange(e) {
-  // I feel like there should be a cleaner way to 
-  // do this, but I'm not sure how
-  if (e.target.id === 'source-input' ||
-     e.target.id === 'subject-input' ||
-     e.target.id === 'title-input') {
+  if (
+    e.target.id === 'source-input' ||
+    e.target.id === 'subject-input' ||
+    e.target.id === 'title-input'
+  ) {
     updateInputChars(e.target);
   }
 }
 
-// Changed this method to accept an element rather than 
+// Changed this method to accept an element rather than
 // an event because it's sometimes called after an event
 // that is not happening on the input (viz, a tag cloud item click)
 function updateInputChars(inputEl) {
-  document.getElementById(inputEl.id + '-chars').textContent = inputEl.textLength;
+  document.getElementById(inputEl.id + '-chars').textContent = inputEl.value.length;
 }
 
 function unlockInput(e) {
   // Hide locked view
   e.target.parentElement.classList.add('hidden');
 
-  // Show input view PREVIOUS VERSION; CHANGED TO BE SLIGHTLY LESS DEPENDENT ON MARKUP
-  // e.target.parentElement.previousElementSibling.classList.remove('hidden');
+  // Show input view
   e.target.parentElement.parentElement.querySelector('.unlocked-input').classList.remove('hidden');
 
   // Give focus to appropriate input
-  var entryRow = e.target.id.replace(/edit-|-button/g,'');
+  var entryRow = e.target.id.replace(/edit-|-button/g, '');
 
   document.getElementById(entryRow + '-input').focus();
 }
 
 function lockInput(e) {
-  // console.log('=== lockInput()');
-  
   var inputEl = e.target;
-  var wordArray; 
+  var wordArray;
   var wordString;
 
   if (inputEl.value.trim() === '') return; // bail if input is empty
 
   // Get the row whose input we're locking
-  var type = inputEl.id.replace('-input','');
+  var type = inputEl.id.replace('-input', '');
 
   // Set value of that row's locked input display
   if (type === 'date') {
     wordString = getDateString(inputEl.valueAsDate);
   } else if (type === 'title') {
-    wordArray = inputEl.value.split(' ');  
-    wordString = wordArray.slice(0,7).join(' ');
+    wordArray = inputEl.value.split(' ');
+    wordString = wordArray.slice(0, 7).join(' ');
 
     if (wordArray.length > 7) {
       wordString += '...';
     }
   } else if (type === 'details') {
     wordArray = inputEl.value.split(' ');
-    wordString = wordArray.slice(0,15).join(' ');
+    wordString = wordArray.slice(0, 15).join(' ');
 
     if (wordArray.length > 15) {
       wordString += '...';
@@ -311,11 +284,11 @@ function lockInput(e) {
     wordString = inputEl.value;
   }
 
-  document.getElementById(type + '-entry').textContent = wordString;  
+  document.getElementById(type + '-entry').textContent = wordString;
 
   // Hide input area
   inputEl.parentElement.classList.add('hidden');
-  
+
   // Show entry display area
   inputEl.parentElement.parentElement.querySelector('.locked-input').classList.remove('hidden');
 
@@ -323,16 +296,15 @@ function lockInput(e) {
   // Perhaps modify this to jump to input that hasn't been locked?
   var newType = entryFormFocusOrder[entryFormFocusOrder.indexOf(type) + 1];
   if (newType) {
-    document.getElementById(newType + '-input').focus();  
+    document.getElementById(newType + '-input').focus();
   } else {
     document.getElementById('submit-button').focus();
   }
-
 }
 
 function checkForm(e) {
   console.log('=== checkForm()');
-  
+
   // Get all inputs
   var inputs = Array.from(document.getElementsByClassName('unlocked-input-value'));
 
@@ -341,10 +313,10 @@ function checkForm(e) {
   var rowsInError = [];
   var propName;
   var newLogData = {};
-  
+
   inputs.forEach(function(input) {
     if (input.value === '') {
-      rowsInError.push(input.id.replace('-input',''));
+      rowsInError.push(input.id.replace('-input', ''));
     }
   });
 
@@ -353,26 +325,27 @@ function checkForm(e) {
     rowsInError.forEach(function(row) {
       document.getElementById(row + '-input').classList.add('error');
       scrollToTop();
-    })
+    });
   } else {
     inputs.forEach(function(input) {
-      propName = input.id.replace('-input','');      
-      
+      propName = input.id.replace('-input', '');
+
       if (input.id === 'date-input') {
         newLogData[propName] = input.valueAsDate;
       } else {
-        newLogData[propName] = input.value;  
+        newLogData[propName] = input.value;
       }
     });
-    
-    console.log('newLogData =',newLogData);
+
+    console.log('newLogData =', newLogData);
 
     // update view to show that submission is taking place
     // add overlay with centered div
     let target = document.getElementById('overlay');
-    target.style.height = document.getElementsByTagName('body')[0].getBoundingClientRect().height + 'px';
+    target.style.height =
+      document.getElementsByTagName('body')[0].getBoundingClientRect().height + 'px';
     target.style.display = 'flex';
-    
+
     addItemToDb(newLogData);
   }
 }
@@ -397,7 +370,7 @@ function clearForm() {
   var dateInput = document.getElementById('date-input');
   dateInput.valueAsDate = new Date(Date.now());
   dateInput.parentElement.classList.add('hidden');
-  var entryDate =  document.getElementById('date-entry');
+  var entryDate = document.getElementById('date-entry');
   entryDate.textContent = getDateString(new Date(Date.now()));
   entryDate.parentElement.classList.remove('hidden');
 
@@ -415,17 +388,22 @@ function clearForm() {
   });
 
   // Scroll back to top
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function removeError(e) {
   e.target.classList.remove('error');
 }
 
-// This is not specific to this module.  It should 
+// This is not specific to this module.  It should
 // eventually be imported from somewhere else.
 function getDateString(date) {
-  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric', day: 'numeric', timeZone: 'UTC'});
+  return date.toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
+    day: 'numeric',
+    timeZone: 'UTC'
+  });
 }
 
 function initializeDate() {
@@ -436,9 +414,9 @@ function initializeDate() {
 
 function populateCloud(type) {
   console.log('=== populateCloud()');
-  
+
   if (!cloudItems[type]) return;
-  
+
   var parent = document.getElementById('entry-form').querySelector('#' + type + '-cloud');
   var cloudItem;
 
@@ -447,7 +425,7 @@ function populateCloud(type) {
   contents.forEach(function(item) {
     cloudItem = document.createElement('span');
     cloudItem.textContent = item;
-    cloudItem.setAttribute('data-parent-cloud',type);
+    cloudItem.setAttribute('data-parent-cloud', type);
     cloudItem.classList.add('cloud-item');
     parent.appendChild(cloudItem);
   });
@@ -458,19 +436,19 @@ function getCustomCssProp(propName) {
 }
 
 function scrollToTop() {
-  window.scrollTo({top: 0,behavior: 'smooth'});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function getScrollTop() {
-  let scrollTop = Math.floor(document.documentElement.scrollTop || document.body.scrollTop)
-  console.log({scrollTop});
+  let scrollTop = Math.floor(document.documentElement.scrollTop || document.body.scrollTop);
+  console.log({ scrollTop });
   return scrollTop;
 }
 
 function getFixedPositionSpacerHeight() {
   // find height of all spacers
   let spacers = Array.from(document.getElementsByClassName('fixed-position-spacer'));
-  
+
   return spacers.reduce((acc, curr) => {
     return acc + curr.scrollHeight;
   }, 0);
