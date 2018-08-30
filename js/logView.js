@@ -869,11 +869,6 @@ function updateSubButtonNav(buttonGroup) {
   let upButton = buttonGroup.querySelector('.previous-row-button');
   let downButton = buttonGroup.querySelector('.next-row-button');
 
-  console.log({ targetRect });
-  console.log({ parentRect });
-  console.log('targetRect.top - parentRect.top =', targetRect.top - parentRect.top);
-  console.log('targetRect.bottom - parentRect.bottom', targetRect.bottom - parentRect.bottom);
-
   upButton.style.display = targetRect.top - parentRect.top < 5 ? 'none' : 'inline-block';
   downButton.style.display = targetRect.bottom - parentRect.bottom < 5 ? 'none' : 'inline-block';
 }
